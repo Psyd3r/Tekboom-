@@ -1,5 +1,5 @@
 
-import { Home, ShoppingCart, Users, Settings, PackageOpen, Package, UserPlus } from "lucide-react";
+import { Home, ShoppingCart, Users, Settings, PackageOpen, Package } from "lucide-react";
 
 export const sidebarLinks = [
   {
@@ -25,12 +25,6 @@ export const sidebarLinks = [
     href: "/clientes",
     icon: Users,
     active: (path: string) => path === "/clientes",
-  },
-  {
-    label: "Usuários Admin",
-    href: "/usuarios",
-    icon: UserPlus,
-    active: (path: string) => path === "/usuarios",
   },
   {
     label: "Configurações",
