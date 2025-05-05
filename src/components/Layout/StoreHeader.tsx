@@ -1,15 +1,16 @@
 
 import { Link } from "react-router-dom";
 import { ShoppingBag, Settings, Heart, User, Menu, ChevronDown, Computer } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import { UserAccountNav } from "@/components/Store/UserAccountNav";
 import { useAuth } from "@/context/AuthContext";
 import { useFavorites } from "@/context/FavoritesContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { StoreLogoHeader } from "@/components/Store/Auth/StoreLogoHeader";
 import { SearchBar } from "@/components/Store/SearchBar";
+import { useFetchCategories } from "@/hooks/category/useFetchCategories";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function StoreHeader() {
   const { userRole, user } = useAuth();
@@ -18,6 +19,10 @@ export function StoreHeader() {
   const isLoggedIn = !!user;
   
   const [showCategoriesMenu, setShowCategoriesMenu] = useState(false);
+  const { data: categories = [], isLoading: categoriesLoading } = useFetchCategories();
+
+  // Filter out categories with no products
+  const activeCategories = categories.filter(cat => cat.productCount && cat.productCount > 0);
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-40">
@@ -103,12 +108,33 @@ export function StoreHeader() {
                 <ChevronDown className="h-4 w-4 ml-1" />
               </Button>
               
-              {/* Dropdown menu - removido as categorias fictícias */}
+              {/* Dropdown menu with categories */}
               {showCategoriesMenu && (
                 <div className="absolute left-0 top-full w-64 bg-white border border-gray-200 shadow-lg rounded-b-md z-50">
                   <div className="py-2">
-                    {/* As categorias serão carregadas dos produtos do admin */}
-                    <p className="px-4 py-2 text-sm text-gray-500">Carregando categorias...</p>
+                    {categoriesLoading ? (
+                      <div className="px-4 py-2">
+                        <Skeleton className="h-4 w-full mb-2" />
+                        <Skeleton className="h-4 w-4/5" />
+                        <Skeleton className="h-4 w-3/5 mt-2" />
+                      </div>
+                    ) : activeCategories.length > 0 ? (
+                      activeCategories.map(category => (
+                        <Link
+                          key={category.id}
+                          to={`/store/categoria/${category.id}`}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                          onClick={() => setShowCategoriesMenu(false)}
+                        >
+                          {category.name}
+                          {category.productCount > 0 && (
+                            <span className="text-xs text-gray-500 ml-2">({category.productCount})</span>
+                          )}
+                        </Link>
+                      ))
+                    ) : (
+                      <p className="px-4 py-2 text-sm text-gray-500">Nenhuma categoria encontrada</p>
+                    )}
                   </div>
                 </div>
               )}
