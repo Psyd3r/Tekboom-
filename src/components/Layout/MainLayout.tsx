@@ -17,7 +17,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
 
   return (
     <div className="flex h-screen bg-[#F5F9FF]">
-      <Sidebar collapsed={sidebarCollapsed} />
+      <Sidebar />
       <div className={cn("flex flex-col flex-1 transition-all duration-300", 
            sidebarCollapsed ? "ml-16" : "ml-64")}>
         <Header onToggleSidebar={toggleSidebar} sidebarCollapsed={sidebarCollapsed} />

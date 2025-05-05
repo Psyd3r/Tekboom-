@@ -1,4 +1,5 @@
-import { Navigate, Route, useLocation } from "react-router-dom";
+
+import { Navigate, Route } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { MainLayout } from "@/components/Layout/MainLayout";
 
@@ -16,124 +17,125 @@ import StockManagement from "@/pages/StockManagement";
 // Protected route component for admin users
 export const AdminRoute = ({ children }: { children: JSX.Element }) => {
   const { user, loading, userRole } = useAuth();
-  const location = useLocation();
   
   if (loading) {
     return <div className="flex h-screen w-full items-center justify-center">Carregando...</div>;
   }
   
   if (!user) {
-    console.log("AdminRoute - Usuário não autenticado, redirecionando para login admin");
-    return <Navigate to="/login" state={{ from: location.pathname }} replace />;
+    return <Navigate to="/login" replace />;
   }
 
-  // Temporariamente permita acesso independente do papel do usuário
-  // para garantir que você possa acessar o painel administrativo
-  console.log("AdminRoute - Acesso permitido para:", userRole);
+  if (userRole !== 'admin') {
+    return <Navigate to="/store" replace />;
+  }
+  
   return children;
 };
 
-export const adminRoutes = (
-  <>
-    <Route
-      path="/"
-      element={
-        <AdminRoute>
-          <MainLayout>
-            <Products />
-          </MainLayout>
-        </AdminRoute>
-      }
-    />
-    <Route
-      path="/produtos"
-      element={
-        <AdminRoute>
-          <MainLayout>
-            <Products />
-          </MainLayout>
-        </AdminRoute>
-      }
-    />
-    <Route
-      path="/produtos/novo"
-      element={
-        <AdminRoute>
-          <MainLayout>
-            <NewProduct />
-          </MainLayout>
-        </AdminRoute>
-      }
-    />
-    <Route
-      path="/produtos/:id/editar"
-      element={
-        <AdminRoute>
-          <MainLayout>
-            <EditProduct />
-          </MainLayout>
-        </AdminRoute>
-      }
-    />
-    <Route
-      path="/estoque"
-      element={
-        <AdminRoute>
-          <MainLayout>
-            <StockManagement />
-          </MainLayout>
-        </AdminRoute>
-      }
-    />
-    <Route
-      path="/pedidos"
-      element={
-        <AdminRoute>
-          <MainLayout>
-            <Orders />
-          </MainLayout>
-        </AdminRoute>
-      }
-    />
-    <Route
-      path="/pedidos/novo"
-      element={
-        <AdminRoute>
-          <MainLayout>
-            <NewOrder />
-          </MainLayout>
-        </AdminRoute>
-      }
-    />
-    <Route
-      path="/clientes"
-      element={
-        <AdminRoute>
-          <MainLayout>
-            <Customers />
-          </MainLayout>
-        </AdminRoute>
-      }
-    />
-    <Route
-      path="/configuracoes"
-      element={
-        <AdminRoute>
-          <MainLayout>
-            <Settings />
-          </MainLayout>
-        </AdminRoute>
-      }
-    />
-    <Route
-      path="/usuarios"
-      element={
-        <AdminRoute>
-          <MainLayout>
-            <Users />
-          </MainLayout>
-        </AdminRoute>
-      }
-    />
-  </>
-);
+export const AdminRoutes = () => {
+  return (
+    <>
+      <Route
+        path="/"
+        element={
+          <AdminRoute>
+            <MainLayout>
+              <Products />
+            </MainLayout>
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/produtos"
+        element={
+          <AdminRoute>
+            <MainLayout>
+              <Products />
+            </MainLayout>
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/produtos/novo"
+        element={
+          <AdminRoute>
+            <MainLayout>
+              <NewProduct />
+            </MainLayout>
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/produtos/:id/editar"
+        element={
+          <AdminRoute>
+            <MainLayout>
+              <EditProduct />
+            </MainLayout>
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/estoque"
+        element={
+          <AdminRoute>
+            <MainLayout>
+              <StockManagement />
+            </MainLayout>
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/pedidos"
+        element={
+          <AdminRoute>
+            <MainLayout>
+              <Orders />
+            </MainLayout>
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/pedidos/novo"
+        element={
+          <AdminRoute>
+            <MainLayout>
+              <NewOrder />
+            </MainLayout>
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/clientes"
+        element={
+          <AdminRoute>
+            <MainLayout>
+              <Customers />
+            </MainLayout>
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/configuracoes"
+        element={
+          <AdminRoute>
+            <MainLayout>
+              <Settings />
+            </MainLayout>
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/usuarios"
+        element={
+          <AdminRoute>
+            <MainLayout>
+              <Users />
+            </MainLayout>
+          </AdminRoute>
+        }
+      />
+    </>
+  );
+};
