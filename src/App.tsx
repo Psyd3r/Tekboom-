@@ -7,7 +7,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { MainLayout } from "./components/Layout/MainLayout";
 import { StoreLayout } from "./components/Layout/StoreLayout";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
-import { CartProvider } from "@/context/CartContext";
 import Products from "./pages/Products";
 import Orders from "./pages/Orders";
 import NewOrder from "./pages/NewOrder";
@@ -24,8 +23,6 @@ import HomePage from "./pages/Store/HomePage";
 import LoginPage from "./pages/Store/LoginPage";
 import ProductPage from "./pages/Store/ProductPage";
 import ProductListPage from "./pages/Store/ProductListPage";
-import CartPage from "./pages/Store/CartPage";
-import CheckoutPage from "./pages/Store/CheckoutPage";
 
 const queryClient = new QueryClient();
 
@@ -193,22 +190,6 @@ const AppRoutes = () => {
           </StoreLayout>
         }
       />
-      <Route
-        path="/store/carrinho"
-        element={
-          <StoreLayout>
-            <CartPage />
-          </StoreLayout>
-        }
-      />
-      <Route
-        path="/store/checkout"
-        element={
-          <StoreLayout requireAuth={true}>
-            <CheckoutPage />
-          </StoreLayout>
-        }
-      />
 
       {/* 404 Route */}
       <Route path="*" element={<NotFound />} />
@@ -223,9 +204,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <CartProvider>
-            <AppRoutes />
-          </CartProvider>
+          <AppRoutes />
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>

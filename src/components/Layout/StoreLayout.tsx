@@ -17,16 +17,14 @@ export const StoreLayout = ({ children, requireAuth = false }: StoreLayoutProps)
   const location = useLocation();
   
   useEffect(() => {
-    // Redirect admin users to the admin panel when they access store pages
-    if (!loading && user && userRole === 'admin' && location.pathname.startsWith('/store')) {
-      navigate('/produtos', { replace: true });
-      return;
+    // Redirect admin users to admin dashboard if they access store pages
+    if (user && userRole === 'admin' && location.pathname.startsWith('/store')) {
+      navigate('/');
     }
     
-    // Redirect unauthenticated users to login if the page requires authentication
+    // Redirect unauthenticated users to login if the page requires auth
     if (!loading && !user && requireAuth) {
       navigate('/store/login', { state: { from: location.pathname } });
-      return;
     }
   }, [user, loading, userRole, requireAuth, navigate, location]);
   

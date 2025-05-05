@@ -37,12 +37,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
       
-      // Corrigindo o erro TypeScript, garantindo que role seja um dos valores esperados
-      if (data?.role === 'admin' || data?.role === 'customer') {
-        setUserRole(data.role);
-      } else {
-        setUserRole('customer'); // Valor padrão caso não seja nem admin nem customer
-      }
+      setUserRole(data?.role || 'customer');
     } catch (error) {
       console.error('Error in fetchUserRole:', error);
     }
@@ -89,24 +84,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw error;
       }
       
-      // Buscar informações do usuário após o login bem-sucedido
-      const { data: profileData, error: profileError } = await supabase
+      const { data: userData } = await supabase
         .from('profiles')
-        .select('role, full_name')
+        .select('role')
         .eq('id', (await supabase.auth.getUser()).data.user?.id)
         .single();
       
-      if (profileError) {
-        console.error('Erro ao buscar perfil:', profileError);
-      }
-      
-      // Determinar o redirecionamento baseado no papel do usuário
-      if (profileData?.role === 'admin') {
+      if (userData?.role === 'admin') {
         toast.success("Login administrativo realizado com sucesso!");
-        navigate("/produtos"); // Redireciona para o painel administrativo
+        navigate("/");
       } else {
         toast.success("Login realizado com sucesso!");
-        navigate("/store"); // Redireciona para a loja
+        navigate("/store");
       }
     } catch (error: any) {
       toast.error(error.message || "Erro ao fazer login");
@@ -133,10 +122,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       toast.success("Usuário criado com sucesso!");
       
-      // Redirecionamento baseado no papel
-      if (role === 'admin') {
-        navigate("/produtos");
-      } else {
+      // If it's a customer, redirect to store
+      if (role === 'customer') {
         navigate("/store");
       }
     } catch (error: any) {
@@ -148,11 +135,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signOut = async () => {
     try {
       await supabase.auth.signOut();
-      // Redirecionar para a página de login apropriada
+      // Redirect based on current role
       if (userRole === 'admin') {
         navigate("/login");
       } else {
-        navigate("/store/login");
+        navigate("/store");
       }
       toast.success("Logout realizado com sucesso!");
     } catch (error: any) {

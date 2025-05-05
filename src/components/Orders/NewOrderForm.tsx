@@ -18,7 +18,7 @@ import { Package, Trash, Plus, User, MapPin } from "lucide-react";
 
 interface Customer {
   id: string;
-  full_name: string | null;
+  full_name: string;
   email: string;
 }
 
@@ -149,13 +149,15 @@ export const NewOrderForm = () => {
       // Create order
       const { data: orderData, error: orderError } = await supabase
         .from('orders')
-        .insert({
-          customer_id: selectedCustomer,
-          status: status,
-          shipping_address: shippingAddress,
-          notes: notes,
-          total_amount: calculateTotal()
-        })
+        .insert([
+          {
+            customer_id: selectedCustomer,
+            status: status,
+            shipping_address: shippingAddress,
+            notes: notes,
+            total_amount: calculateTotal()
+          }
+        ])
         .select('id')
         .single();
         
@@ -209,7 +211,7 @@ export const NewOrderForm = () => {
               <SelectContent>
                 {customers.map(customer => (
                   <SelectItem key={customer.id} value={customer.id}>
-                    {customer.full_name || 'Sem nome'} ({customer.email})
+                    {customer.full_name} ({customer.email})
                   </SelectItem>
                 ))}
               </SelectContent>

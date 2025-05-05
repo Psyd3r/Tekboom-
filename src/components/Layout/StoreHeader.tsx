@@ -14,12 +14,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/context/AuthContext";
-import { useCart } from "@/context/CartContext";
 
 export const StoreHeader = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, signOut } = useAuth();
-  const { cart } = useCart();
   
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -65,11 +63,9 @@ export const StoreHeader = () => {
               <Link to="/store/carrinho">
                 <Button variant="ghost" size="icon" className="relative">
                   <ShoppingBag className="h-5 w-5" />
-                  {cart.count > 0 && (
-                    <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs bg-primary">
-                      {cart.count}
-                    </Badge>
-                  )}
+                  <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs bg-primary">
+                    0
+                  </Badge>
                 </Button>
               </Link>
               {user ? (
@@ -149,11 +145,6 @@ export const StoreHeader = () => {
                 <Link to="/store/carrinho" className="flex items-center gap-1">
                   <ShoppingBag className="h-5 w-5" />
                   <span>Carrinho</span>
-                  {cart.count > 0 && (
-                    <Badge className="h-5 w-5 flex items-center justify-center p-0 text-xs bg-primary">
-                      {cart.count}
-                    </Badge>
-                  )}
                 </Link>
                 {user ? (
                   <Link to="/store/minha-conta" className="flex items-center gap-1">
