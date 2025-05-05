@@ -14,14 +14,18 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { signIn, user } = useAuth();
+  const { signIn, user, userRole } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
-      navigate("/produtos");
+      if (userRole === 'admin') {
+        navigate("/produtos");
+      } else {
+        navigate("/store");
+      }
     }
-  }, [user, navigate]);
+  }, [user, userRole, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

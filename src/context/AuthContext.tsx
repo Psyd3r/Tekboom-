@@ -103,7 +103,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Determinar o redirecionamento baseado no papel do usuário
       if (profileData?.role === 'admin') {
         toast.success("Login administrativo realizado com sucesso!");
-        navigate("/"); // Redireciona para a raiz, que é mapeada para o painel administrativo
+        navigate("/produtos"); // Redireciona para o painel administrativo
       } else {
         toast.success("Login realizado com sucesso!");
         navigate("/store"); // Redireciona para a loja
@@ -135,7 +135,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       // Redirecionamento baseado no papel
       if (role === 'admin') {
-        navigate("/");
+        navigate("/produtos");
       } else {
         navigate("/store");
       }
