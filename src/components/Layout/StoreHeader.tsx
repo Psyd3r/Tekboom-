@@ -1,155 +1,167 @@
 
-import { Link } from "react-router-dom";
-import { ShoppingBag, Settings, Search, Heart, User, Menu, ChevronDown, Computer } from "lucide-react";
-
-import { siteConfig } from "@/config/site";
-import { Icons } from "@/components/icons";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { UserAccountNav } from "@/components/Store/UserAccountNav";
-import { useAuth } from "@/context/AuthContext";
-import { useFavorites } from "@/context/FavoritesContext";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import {
+  Search,
+  ShoppingBag,
+  User,
+  Menu,
+  X,
+  Store,
+  Heart,
+} from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/context/AuthContext";
 
-export function StoreHeader() {
-  const { userRole, user } = useAuth();
-  const { favorites } = useFavorites();
-  const isAdmin = userRole === 'admin';
-  const isLoggedIn = !!user;
+export const StoreHeader = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, signOut } = useAuth();
   
-  const [showCategoriesMenu, setShowCategoriesMenu] = useState(false);
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
 
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-40">
-      {/* Top bar with secondary links */}
-      <div className="bg-[#0D47A1] text-white py-1">
-        <div className="container flex justify-end text-xs">
-          <div className="flex items-center space-x-4">
-            <Link to="/store/ofertas" className="hover:underline">Ofertas do dia</Link>
-            <Link to="/store/historico" className="hover:underline">Histórico de pedidos</Link>
-            <Link to="/store/ajuda" className="hover:underline">Central de ajuda</Link>
-            {isAdmin && (
-              <Link to="/produtos" className="hover:underline flex items-center">
-                <Settings className="h-3 w-3 mr-1" />
-                Painel Admin
-              </Link>
-            )}
-          </div>
+    <header className="bg-white border-b border-gray-100 sticky top-0 z-40">
+      <div className="container mx-auto px-4">
+        {/* Top Bar */}
+        <div className="py-2 text-xs text-center text-gray-500 border-b border-gray-100 hidden md:block">
+          <span>Frete grátis para compras acima de R$100</span>
         </div>
-      </div>
-
-      {/* Main header */}
-      <div className="container py-4">
-        <div className="flex items-center justify-between gap-4">
+        
+        {/* Main Header */}
+        <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/store" className="flex items-center gap-2">
-            <Icons.logo className="h-8 w-8" />
-            <span className="font-bold text-xl text-[#1E88E5]">{siteConfig.name}</span>
+            <Store className="h-7 w-7 text-primary" />
+            <span className="font-bold text-xl">Teekbom</span>
           </Link>
-
-          {/* Search bar */}
-          <div className="flex-1 max-w-2xl hidden md:flex">
-            <div className="relative flex w-full">
+          
+          {/* Search - Desktop */}
+          <div className="hidden md:block max-w-md w-full mx-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
               <Input
-                type="text"
-                placeholder="O que você está procurando?"
-                className="rounded-r-none border-r-0 focus-visible:ring-[#1E88E5]"
+                type="search"
+                placeholder="Buscar produtos..."
+                className="w-full pl-10 border-gray-200"
               />
-              <Button 
-                variant="default" 
-                size="icon" 
-                className="rounded-l-none bg-[#1E88E5] hover:bg-[#1976D2]"
-              >
-                <Search className="h-4 w-4" />
-              </Button>
             </div>
           </div>
-
-          {/* Account / Cart */}
-          <div className="flex items-center gap-4">
-            <div className="hidden md:flex items-center gap-4">
-              <Link to="/store/favoritos" className="flex flex-col items-center text-gray-700 hover:text-[#1E88E5] relative">
-                <Heart className="h-5 w-5" />
-                <span className="text-xs">Favoritos</span>
-                {favorites.length > 0 && (
-                  <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 bg-[#E53935]">
-                    {favorites.length}
-                  </Badge>
-                )}
+          
+          {/* Nav Icons */}
+          <div className="flex items-center gap-2">
+            {/* Desktop navigation */}
+            <div className="hidden md:flex items-center gap-1">
+              <Link to="/store/favoritos">
+                <Button variant="ghost" size="icon" className="relative">
+                  <Heart className="h-5 w-5" />
+                </Button>
               </Link>
-              
-              {isLoggedIn ? (
-                <UserAccountNav />
+              <Link to="/store/carrinho">
+                <Button variant="ghost" size="icon" className="relative">
+                  <ShoppingBag className="h-5 w-5" />
+                  <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs bg-primary">
+                    0
+                  </Badge>
+                </Button>
+              </Link>
+              {user ? (
+                <Link to="/store/minha-conta">
+                  <Button variant="ghost" size="icon">
+                    <User className="h-5 w-5" />
+                  </Button>
+                </Link>
               ) : (
-                <Link to="/store/login" className="flex flex-col items-center text-gray-700 hover:text-[#1E88E5]">
-                  <User className="h-5 w-5" />
-                  <span className="text-xs">Entrar</span>
+                <Link to="/store/login">
+                  <Button variant="outline" size="sm">
+                    Login
+                  </Button>
                 </Link>
               )}
             </div>
             
-            <Link to="/store/carrinho" className="flex flex-col items-center text-gray-700 hover:text-[#1E88E5]">
-              <ShoppingBag className="h-5 w-5" />
-              <span className="text-xs">Carrinho</span>
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* Categories bar */}
-      <div className="bg-[#ECEFF1] border-y border-gray-200">
-        <div className="container">
-          <div className="flex items-center">
-            {/* Categories dropdown */}
-            <div className="relative">
-              <Button
-                variant="ghost"
-                className="flex items-center py-3 px-4 text-gray-800 hover:bg-[#1E88E5] hover:text-white"
-                onClick={() => setShowCategoriesMenu(!showCategoriesMenu)}
-              >
-                <Menu className="h-5 w-5 mr-2" />
-                Categorias
-                <ChevronDown className="h-4 w-4 ml-1" />
-              </Button>
-              
-              {/* Dropdown menu - removido as categorias fictícias */}
-              {showCategoriesMenu && (
-                <div className="absolute left-0 top-full w-64 bg-white border border-gray-200 shadow-lg rounded-b-md z-50">
-                  <div className="py-2">
-                    {/* As categorias serão carregadas dos produtos do admin */}
-                    <p className="px-4 py-2 text-sm text-gray-500">Carregando categorias...</p>
-                  </div>
-                </div>
+            {/* Mobile menu button */}
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="md:hidden"
+              onClick={toggleMobileMenu}
+            >
+              {mobileMenuOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
               )}
-            </div>
-            
-            {/* Navigation links */}
-            <nav className="hidden md:flex">
-              <Link to="/store/produtos" className="py-3 px-4 text-gray-800 hover:bg-[#1E88E5] hover:text-white">
-                Produtos
-              </Link>
-              <Link to="/store/lancamentos" className="py-3 px-4 text-gray-800 hover:bg-[#1E88E5] hover:text-white">
-                Lançamentos
-              </Link>
-              <Link to="/store/promocoes" className="py-3 px-4 text-gray-800 hover:bg-[#1E88E5] hover:text-white">
-                Promoções
-              </Link>
-              <Link to="/store/monteseupc" className="py-3 px-4 text-gray-800 flex items-center gap-1 font-medium bg-blue-100 hover:bg-[#1E88E5] hover:text-white">
-                <Computer className="h-4 w-4" />
-                Monte seu PC
-              </Link>
-            </nav>
-
-            {/* Mobile search button */}
-            <div className="ml-auto md:hidden">
-              <Button variant="ghost" size="icon" className="text-gray-800">
-                <Search className="h-5 w-5" />
-              </Button>
-            </div>
+            </Button>
+          </div>
+        </div>
+        
+        {/* Navigation */}
+        <nav className="hidden md:block py-3">
+          <ul className="flex gap-6 text-sm font-medium">
+            <li><Link to="/store" className="hover:text-primary transition-colors">Início</Link></li>
+            <li><Link to="/store/produtos" className="hover:text-primary transition-colors">Produtos</Link></li>
+            <li><Link to="/store/categorias" className="hover:text-primary transition-colors">Categorias</Link></li>
+            <li><Link to="/store/ofertas" className="hover:text-primary transition-colors">Ofertas</Link></li>
+            <li><Link to="/store/sobre" className="hover:text-primary transition-colors">Sobre nós</Link></li>
+            <li><Link to="/store/contato" className="hover:text-primary transition-colors">Contato</Link></li>
+          </ul>
+        </nav>
+        
+        {/* Mobile search - placed below main header */}
+        <div className="md:hidden py-3">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
+            <Input
+              type="search"
+              placeholder="Buscar produtos..."
+              className="w-full pl-10 border-gray-200"
+            />
           </div>
         </div>
       </div>
+      
+      {/* Mobile menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden border-t border-gray-100">
+          <div className="container mx-auto px-4 py-4">
+            <nav className="space-y-4">
+              <ul className="space-y-3 border-b border-gray-100 pb-4">
+                <li><Link to="/store" className="block py-1">Início</Link></li>
+                <li><Link to="/store/produtos" className="block py-1">Produtos</Link></li>
+                <li><Link to="/store/categorias" className="block py-1">Categorias</Link></li>
+                <li><Link to="/store/ofertas" className="block py-1">Ofertas</Link></li>
+                <li><Link to="/store/sobre" className="block py-1">Sobre nós</Link></li>
+                <li><Link to="/store/contato" className="block py-1">Contato</Link></li>
+              </ul>
+              <div className="flex gap-4 pt-2">
+                <Link to="/store/favoritos" className="flex items-center gap-1">
+                  <Heart className="h-5 w-5" />
+                  <span>Favoritos</span>
+                </Link>
+                <Link to="/store/carrinho" className="flex items-center gap-1">
+                  <ShoppingBag className="h-5 w-5" />
+                  <span>Carrinho</span>
+                </Link>
+                {user ? (
+                  <Link to="/store/minha-conta" className="flex items-center gap-1">
+                    <User className="h-5 w-5" />
+                    <span>Minha Conta</span>
+                  </Link>
+                ) : (
+                  <Link to="/store/login" className="flex items-center gap-1">
+                    <User className="h-5 w-5" />
+                    <span>Entrar</span>
+                  </Link>
+                )}
+              </div>
+            </nav>
+          </div>
+        </div>
+      )}
     </header>
   );
-}
+};
