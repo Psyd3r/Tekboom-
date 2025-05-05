@@ -5,13 +5,15 @@ import {
   ShoppingBag, 
   Users, 
   Settings, 
-  Home, 
   ChevronLeft, 
   ChevronRight, 
-  Cpu
+  Store,
+  UserCog
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useAuth } from "@/context/AuthContext";
+import { Button } from "@/components/ui/button";
 
 interface SidebarProps {
   collapsed: boolean;
@@ -58,12 +60,13 @@ const SidebarItem = ({ icon: Icon, label, href, active, collapsed }: SidebarItem
 export const Sidebar = ({ collapsed }: SidebarProps) => {
   const location = useLocation();
   const currentPath = location.pathname;
+  const { signOut, user } = useAuth();
 
   const mainNavItems = [
-    { icon: Home, label: "Dashboard", href: "/" },
     { icon: Package, label: "Produtos", href: "/produtos" },
     { icon: ShoppingBag, label: "Pedidos", href: "/pedidos" },
     { icon: Users, label: "Clientes", href: "/clientes" },
+    { icon: UserCog, label: "Usuários", href: "/usuarios" },
     { icon: Settings, label: "Configurações", href: "/configuracoes" },
   ];
 
@@ -80,12 +83,12 @@ export const Sidebar = ({ collapsed }: SidebarProps) => {
       )}>
         {!collapsed && (
           <div className="flex items-center gap-2">
-            <Cpu className="h-7 w-7 text-primary" />
-            <span className="font-bold text-xl text-sidebar-foreground">Hardware</span>
+            <Store className="h-7 w-7 text-primary" />
+            <span className="font-bold text-xl text-sidebar-foreground">Teekbom</span>
           </div>
         )}
         {collapsed && (
-          <Cpu className="h-7 w-7 text-primary" />
+          <Store className="h-7 w-7 text-primary" />
         )}
       </div>
       <nav className="flex-1 p-2 overflow-y-auto">
@@ -106,8 +109,13 @@ export const Sidebar = ({ collapsed }: SidebarProps) => {
           {!collapsed && (
             <div className="flex flex-col">
               <span className="text-sm font-medium">Admin</span>
-              <span className="text-xs opacity-70">admin@hardware.com</span>
+              <span className="text-xs opacity-70">{user?.email || "admin@teekbom.com"}</span>
             </div>
+          )}
+          {!collapsed && (
+            <Button variant="ghost" size="sm" onClick={() => signOut()}>
+              Sair
+            </Button>
           )}
         </div>
       </div>
