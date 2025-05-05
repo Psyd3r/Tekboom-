@@ -29,8 +29,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
-import { Package, Plus, MoreVertical, AlertTriangle, XCircle, Loader2, ChevronLeft } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Package, Plus, MoreVertical, AlertTriangle, XCircle, Loader2 } from "lucide-react";
 
 interface Product {
   id: string;
@@ -201,43 +200,40 @@ export function StockManagement() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center mb-6">
-        <Link to="/" className="mr-2 text-blue-500 hover:text-blue-700">
-          <ChevronLeft className="h-5 w-5" />
-        </Link>
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-6">
         <h2 className="text-xl font-bold flex items-center">
           <Package className="mr-2 h-5 w-5" /> 
           Gestão de Estoque
         </h2>
-      </div>
-      
-      <div className="flex gap-2 mb-4">
-        <Button 
-          variant="default" 
-          size="sm"
-          className={stockFilter === "all" ? "bg-blue-500 text-white" : "bg-gray-100 text-gray-800"}
-          onClick={() => setStockFilter("all")}
-        >
-          Todos
-        </Button>
-        <Button 
-          variant="outline" 
-          size="sm"
-          className={stockFilter === "low" ? "bg-amber-500 text-white" : "bg-gray-100 text-gray-800"}
-          onClick={() => setStockFilter("low")}
-        >
-          <AlertTriangle className="h-4 w-4 mr-1" />
-          Estoque baixo
-        </Button>
-        <Button 
-          variant="outline" 
-          size="sm"
-          className={stockFilter === "out" ? "bg-red-500 text-white" : "bg-gray-100 text-gray-800"}
-          onClick={() => setStockFilter("out")}
-        >
-          <XCircle className="h-4 w-4 mr-1" />
-          Sem estoque
-        </Button>
+        
+        <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            size="sm"
+            className={stockFilter === "all" ? "bg-primary text-primary-foreground" : ""}
+            onClick={() => setStockFilter("all")}
+          >
+            Todos
+          </Button>
+          <Button 
+            variant="outline" 
+            size="sm"
+            className={stockFilter === "low" ? "bg-amber-500 text-white border-amber-500 hover:bg-amber-600 hover:text-white" : ""}
+            onClick={() => setStockFilter("low")}
+          >
+            <AlertTriangle className="h-4 w-4 mr-1" />
+            Estoque baixo
+          </Button>
+          <Button 
+            variant="outline" 
+            size="sm"
+            className={stockFilter === "out" ? "bg-red-500 text-white border-red-500 hover:bg-red-600 hover:text-white" : ""}
+            onClick={() => setStockFilter("out")}
+          >
+            <XCircle className="h-4 w-4 mr-1" />
+            Sem estoque
+          </Button>
+        </div>
       </div>
 
       {isLoading ? (
@@ -245,10 +241,10 @@ export function StockManagement() {
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
       ) : (
-        <div className="border rounded-md bg-white">
+        <div className="border rounded-md">
           <Table>
             <TableHeader>
-              <TableRow className="bg-gray-50">
+              <TableRow>
                 <TableHead>Produto</TableHead>
                 <TableHead className="hidden sm:table-cell">SKU</TableHead>
                 <TableHead className="text-right">Preço</TableHead>
@@ -259,11 +255,9 @@ export function StockManagement() {
             <TableBody>
               {products.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-16">
-                    <div className="flex flex-col items-center justify-center">
-                      <Package className="mx-auto h-12 w-12 text-gray-400 mb-3" />
-                      <p className="text-gray-500 text-lg">Nenhum produto encontrado</p>
-                    </div>
+                  <TableCell colSpan={5} className="text-center py-8">
+                    <Package className="mx-auto h-8 w-8 text-muted-foreground mb-2" />
+                    <p className="text-muted-foreground">Nenhum produto encontrado</p>
                   </TableCell>
                 </TableRow>
               ) : (

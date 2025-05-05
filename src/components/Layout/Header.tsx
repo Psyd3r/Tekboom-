@@ -9,7 +9,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { AdminHeaderExtras } from "./AdminHeaderExtras";
 
 interface HeaderProps {
   onToggleSidebar: () => void;
@@ -20,21 +19,21 @@ export const Header = ({ onToggleSidebar, sidebarCollapsed }: HeaderProps) => {
   const isMobile = useIsMobile();
 
   return (
-    <header className="h-16 border-b border-[#ECEFF1] bg-white flex items-center px-4 justify-between sticky top-0 z-20 w-full shadow-sm">
+    <header className="h-16 border-b border-[#ECEFF1] bg-white flex items-center px-4 justify-between sticky top-0 z-10 w-full">
       <div className="flex items-center">
         <Button
           variant="ghost"
           size="icon"
           onClick={onToggleSidebar}
-          className="mr-4 text-primary"
+          className="mr-4"
           aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {isMobile ? (
-            <Menu className="h-5 w-5" />
+            <Menu className="h-5 w-5 text-[#546E7A]" />
           ) : sidebarCollapsed ? (
-            <ChevronRight className="h-5 w-5" />
+            <ChevronRight className="h-5 w-5 text-[#546E7A]" />
           ) : (
-            <ChevronLeft className="h-5 w-5" />
+            <ChevronLeft className="h-5 w-5 text-[#546E7A]" />
           )}
         </Button>
         <div className="relative max-w-md w-full hidden sm:block">
@@ -47,7 +46,6 @@ export const Header = ({ onToggleSidebar, sidebarCollapsed }: HeaderProps) => {
         </div>
       </div>
       <div className="flex items-center space-x-2">
-        <AdminHeaderExtras />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon" className="relative">

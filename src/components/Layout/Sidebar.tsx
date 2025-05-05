@@ -35,10 +35,10 @@ export function Sidebar({ className, collapsed = false, onClose }: SidebarProps)
     <div
       ref={sidebarRef}
       className={cn(
-        "fixed z-30 h-full bg-sidebar text-white transition-all duration-300 sidebar-shadow",
+        "fixed z-30 h-full bg-sidebar-DEFAULT text-sidebar-foreground transition-all duration-300",
         collapsed ? "w-16" : "w-64",
-        isMobile && collapsed && "mobile-sidebar-closed",
-        isMobile && !collapsed && "mobile-sidebar-open",
+        isMobile && collapsed && "-translate-x-full",
+        isMobile && !collapsed && "translate-x-0",
         className
       )}
     >
@@ -46,15 +46,15 @@ export function Sidebar({ className, collapsed = false, onClose }: SidebarProps)
         <div className="space-y-4 py-4">
           <div className="px-4 py-2">
             {!collapsed ? (
-              <h2 className="mb-4 px-2 text-lg font-semibold tracking-tight overflow-hidden whitespace-nowrap text-white">
+              <h2 className="mb-2 px-2 text-lg font-semibold tracking-tight overflow-hidden whitespace-nowrap">
                 Teekbom Admin
               </h2>
             ) : (
-              <h2 className="mb-4 px-2 text-center text-lg font-semibold tracking-tight overflow-hidden text-white">
+              <h2 className="mb-2 px-2 text-center text-lg font-semibold tracking-tight overflow-hidden">
                 TB
               </h2>
             )}
-            <div className="space-y-2">
+            <div className="space-y-1">
               {sidebarLinks.map((link) => {
                 const Icon = link.icon;
                 const isActive = link.active(location.pathname);
@@ -66,15 +66,12 @@ export function Sidebar({ className, collapsed = false, onClose }: SidebarProps)
                     size="sm"
                     className={cn(
                       "w-full justify-start",
-                      isActive 
-                        ? "bg-white text-sidebar bg-opacity-90 font-medium" 
-                        : "hover:bg-white/20 text-white font-medium",
-                      collapsed ? "justify-center px-2" : "px-3 py-2"
+                      collapsed && "justify-center px-2"
                     )}
                     asChild
                   >
                     <Link to={link.href}>
-                      <Icon className={cn("h-5 w-5", !collapsed && "mr-2")} />
+                      <Icon className={cn("h-4 w-4", !collapsed && "mr-2")} />
                       {!collapsed && <span>{link.label}</span>}
                     </Link>
                   </Button>

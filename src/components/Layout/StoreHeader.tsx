@@ -11,8 +11,6 @@ import { useAuth } from "@/context/AuthContext";
 export function StoreHeader() {
   const { userRole } = useAuth();
   const isAdmin = userRole === 'admin';
-  
-  console.log("StoreHeader - User role:", userRole);
 
   return (
     <header className="bg-background sticky top-0 z-40 border-b">
@@ -29,12 +27,8 @@ export function StoreHeader() {
           
           {isAdmin && (
             <Link to="/produtos" className="flex items-center">
-              <Button 
-                variant="secondary" 
-                size="sm" 
-                className="flex items-center gap-2 bg-[#0D47A1] hover:bg-[#0A3D8F]"
-              >
-                <Settings className="h-4 w-4" />
+              <Button variant="secondary" size="sm" className="flex items-center">
+                <Settings className="h-4 w-4 mr-2" />
                 Painel Admin
               </Button>
             </Link>
