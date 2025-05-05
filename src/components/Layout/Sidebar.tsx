@@ -1,86 +1,76 @@
-
-import React, { useRef, useEffect } from "react";
+import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { sidebarLinks } from "./SidebarLinks";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { Home, ShoppingCart, Users, Settings, PackageOpen, Package } from "lucide-react";
 
-export interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
-  collapsed?: boolean;
-  onClose?: () => void;
-}
+interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export function Sidebar({ className, collapsed = false, onClose }: SidebarProps) {
+export function Sidebar({ className }: SidebarProps) {
   const location = useLocation();
-  const isMobile = useIsMobile();
-  const sidebarRef = useRef<HTMLDivElement>(null);
 
-  // Close sidebar when clicking outside on mobile
-  useEffect(() => {
-    if (!isMobile || !onClose) return;
-
-    const handleClickOutside = (event: MouseEvent) => {
-      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
-        onClose();
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isMobile, onClose]);
+  const sidebarLinks = [
+    {
+      label: "Produtos",
+      href: "/produtos",
+      icon: Package,
+      active: (path: string) => path === "/produtos" || path.startsWith("/produtos/"),
+    },
+    {
+      label: "Estoque",
+      href: "/estoque",
+      icon: PackageOpen,
+      active: (path: string) => path === "/estoque",
+    },
+    {
+      label: "Pedidos",
+      href: "/pedidos",
+      icon: ShoppingCart,
+      active: (path: string) => path === "/pedidos" || path.startsWith("/pedidos/"),
+    },
+    {
+      label: "Clientes",
+      href: "/clientes",
+      icon: Users,
+      active: (path: string) => path === "/clientes",
+    },
+    {
+      label: "Configurações",
+      href: "/configuracoes",
+      icon: Settings,
+      active: (path: string) => path === "/configuracoes",
+    },
+  ];
 
   return (
-    <div
-      ref={sidebarRef}
-      className={cn(
-        "fixed z-30 h-full bg-sidebar-DEFAULT text-sidebar-foreground transition-all duration-300",
-        collapsed ? "w-16" : "w-64",
-        isMobile && collapsed && "-translate-x-full",
-        isMobile && !collapsed && "translate-x-0",
-        className
-      )}
-    >
-      <ScrollArea className="h-full">
-        <div className="space-y-4 py-4">
-          <div className="px-4 py-2">
-            {!collapsed ? (
-              <h2 className="mb-2 px-2 text-lg font-semibold tracking-tight overflow-hidden whitespace-nowrap">
-                Teekbom Admin
-              </h2>
-            ) : (
-              <h2 className="mb-2 px-2 text-center text-lg font-semibold tracking-tight overflow-hidden">
-                TB
-              </h2>
-            )}
-            <div className="space-y-1">
-              {sidebarLinks.map((link) => {
-                const Icon = link.icon;
-                const isActive = link.active(location.pathname);
-                
-                return (
-                  <Button
-                    key={link.href}
-                    variant={isActive ? "secondary" : "ghost"}
-                    size="sm"
-                    className={cn(
-                      "w-full justify-start",
-                      collapsed && "justify-center px-2"
-                    )}
-                    asChild
-                  >
-                    <Link to={link.href}>
-                      <Icon className={cn("h-4 w-4", !collapsed && "mr-2")} />
-                      {!collapsed && <span>{link.label}</span>}
-                    </Link>
-                  </Button>
-                );
-              })}
-            </div>
+    <div className={cn("pb-12", className)}>
+      <div className="space-y-4 py-4">
+        <div className="px-4 py-2">
+          <h2 className="mb-2 px-2 text-lg font-semibold tracking-tight">
+            Teekbom Admin
+          </h2>
+          <div className="space-y-1">
+            {sidebarLinks.map((link) => {
+              const Icon = link.icon;
+              return (
+                <Button
+                  key={link.href}
+                  variant={link.active(location.pathname) ? "secondary" : "ghost"}
+                  size="sm"
+                  className="w-full justify-start"
+                  asChild
+                >
+                  <Link to={link.href}>
+                    <Icon className="mr-2 h-4 w-4" />
+                    {link.label}
+                  </Link>
+                </Button>
+              );
+            })}
           </div>
         </div>
-      </ScrollArea>
+      </div>
     </div>
   );
 }

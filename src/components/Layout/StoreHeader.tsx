@@ -1,17 +1,12 @@
-
 import { Link } from "react-router-dom";
-import { ShoppingBag, Settings } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
 
 import { siteConfig } from "@/config/site";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { UserAccountNav } from "@/components/Store/UserAccountNav";
-import { useAuth } from "@/context/AuthContext";
 
 export function StoreHeader() {
-  const { userRole } = useAuth();
-  const isAdmin = userRole === 'admin';
-
   return (
     <header className="bg-background sticky top-0 z-40 border-b">
       <div className="container flex h-16 items-center justify-between py-4">
@@ -24,16 +19,6 @@ export function StoreHeader() {
           <Link to="/store/produtos">
             <Button variant="ghost">Produtos</Button>
           </Link>
-          
-          {isAdmin && (
-            <Link to="/produtos" className="flex items-center">
-              <Button variant="secondary" size="sm" className="flex items-center">
-                <Settings className="h-4 w-4 mr-2" />
-                Painel Admin
-              </Button>
-            </Link>
-          )}
-          
           <UserAccountNav />
           <Link to="/store/carrinho">
             <Button variant="ghost">
