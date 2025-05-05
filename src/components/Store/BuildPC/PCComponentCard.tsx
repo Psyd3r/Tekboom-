@@ -14,14 +14,14 @@ export const PCComponentCard = ({ component, isSelected, onSelect }: PCComponent
     <Card key={component.id} className="overflow-hidden">
       <div className="aspect-square bg-gray-100 relative">
         <img 
-          src={component.image} 
+          src={component.image || "https://placehold.co/300x300"} 
           alt={component.name} 
           className="object-contain w-full h-full p-4"
         />
       </div>
       <CardHeader className="py-3">
-        <CardTitle className="text-base">{component.name}</CardTitle>
-        <CardDescription>{component.specs}</CardDescription>
+        <CardTitle className="text-base line-clamp-2">{component.name}</CardTitle>
+        <CardDescription className="line-clamp-3">{component.specs}</CardDescription>
       </CardHeader>
       <CardFooter className="flex justify-between pt-0">
         <span className="font-bold">

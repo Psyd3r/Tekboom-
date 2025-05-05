@@ -29,3 +29,17 @@ export const componentNames = {
   keyboard: "Teclado",
   mouse: "Mouse",
 };
+
+// Map component types to product categories (as stored in the database)
+export const typeToCategory = {
+  cpu: "cpu",
+  motherboard: "motherboard",
+  gpu: "gpu",
+  ram: "ram",
+  storage: "storage",
+  psu: "psu",
+  case: "case",
+  monitor: "monitor",
+  keyboard: "keyboard",
+  mouse: "mouse"
+};

@@ -7,20 +7,32 @@ export const useFetchPCComponents = (type?: string) => {
   return useQuery({
     queryKey: ['pc-components', type],
     queryFn: async () => {
-      let query = supabase.from('pc_components').select('*');
-      
-      if (type) {
-        query = query.eq('type', type);
+      if (!type) {
+        return [];
       }
       
-      const { data, error } = await query.order('price', { ascending: true });
+      // Fetch products with the corresponding category
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('category', type)
+        .order('price', { ascending: true });
       
       if (error) {
-        console.error('Error fetching PC components:', error);
-        throw new Error('Failed to fetch PC components');
+        console.error('Error fetching products for PC builder:', error);
+        throw new Error('Failed to fetch products for PC builder');
       }
       
-      return data as PCComponent[];
+      // Map the product data to match the PCComponent structure
+      return data.map(product => ({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image || "https://placehold.co/300x300",
+        type: type,
+        specs: product.description || "",
+        compatibility: []
+      })) as PCComponent[];
     }
   });
 };

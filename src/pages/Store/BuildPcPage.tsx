@@ -15,6 +15,7 @@ import {
 } from "@/components/Store/BuildPC/CompatibilityHelper";
 import { ComponentType, PCComponent, SelectedComponents } from "@/types/buildpc";
 import { useFetchPCComponents } from "@/hooks/pc/useFetchPCComponents";
+import { typeToCategory } from "@/components/Store/BuildPC/PCComponentData";
 
 const BuildPcPage = () => {
   const [selectedTab, setSelectedTab] = useState<ComponentType>("cpu");
@@ -63,7 +64,7 @@ const BuildPcPage = () => {
     Object.values(selectedComponents).forEach(component => {
       if (component) {
         addToCart({
-          id: crypto.randomUUID(),
+          id: component.id,
           product_id: component.id,
           name: component.name,
           price: component.price,

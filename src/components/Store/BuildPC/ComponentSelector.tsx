@@ -63,7 +63,8 @@ export const ComponentSelector = ({
             </div>
           ) : (
             <div className="text-center py-12 border rounded-lg">
-              <p className="text-gray-500">Nenhum componente encontrado para esta categoria.</p>
+              <p className="text-gray-500">Nenhum produto encontrado na categoria {componentNames[key as ComponentType]}.</p>
+              <p className="text-sm text-gray-400 mt-2">Adicione produtos com a categoria "{key}" no sistema.</p>
             </div>
           )}
         </TabsContent>
