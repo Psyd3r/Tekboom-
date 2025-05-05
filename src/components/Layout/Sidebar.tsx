@@ -37,8 +37,8 @@ const SidebarItem = ({ icon: Icon, label, href, active, collapsed }: SidebarItem
             className={cn(
               "flex items-center px-4 py-3 my-1 rounded-lg transition-all duration-300",
               active 
-                ? "bg-sidebar-primary text-sidebar-primary-foreground" 
-                : "text-sidebar-foreground hover:bg-sidebar-accent"
+                ? "bg-[#1E88E5] text-white" 
+                : "text-white hover:bg-[#1565C0]"
             )}
           >
             <Icon className="h-5 w-5 min-w-5" />
@@ -48,7 +48,7 @@ const SidebarItem = ({ icon: Icon, label, href, active, collapsed }: SidebarItem
           </Link>
         </TooltipTrigger>
         {collapsed && (
-          <TooltipContent side="right" className="bg-secondary text-white">
+          <TooltipContent side="right" className="bg-[#0D47A1] text-white">
             {label}
           </TooltipContent>
         )}
@@ -73,22 +73,22 @@ export const Sidebar = ({ collapsed }: SidebarProps) => {
   return (
     <aside 
       className={cn(
-        "bg-sidebar fixed top-0 left-0 h-full flex flex-col z-40 transition-all duration-300 border-r border-sidebar-border",
+        "bg-[#0D47A1] fixed top-0 left-0 h-full flex flex-col z-40 transition-all duration-300 border-r border-[#1565C0]",
         collapsed ? "w-16" : "w-64"
       )}
     >
       <div className={cn(
-        "flex items-center h-16 px-4 border-b border-sidebar-border transition-all duration-300",
+        "flex items-center h-16 px-4 border-b border-[#1565C0] transition-all duration-300",
         collapsed ? "justify-center" : "justify-between"
       )}>
         {!collapsed && (
           <div className="flex items-center gap-2">
-            <Store className="h-7 w-7 text-primary" />
-            <span className="font-bold text-xl text-sidebar-foreground">Teekbom</span>
+            <Store className="h-7 w-7 text-[#64B5F6]" />
+            <span className="font-bold text-xl text-white">Teekbom</span>
           </div>
         )}
         {collapsed && (
-          <Store className="h-7 w-7 text-primary" />
+          <Store className="h-7 w-7 text-[#64B5F6]" />
         )}
       </div>
       <nav className="flex-1 p-2 overflow-y-auto">
@@ -104,8 +104,8 @@ export const Sidebar = ({ collapsed }: SidebarProps) => {
           />
         ))}
       </nav>
-      <div className="p-4 border-t border-sidebar-border">
-        <div className="flex items-center justify-between text-sidebar-foreground">
+      <div className="p-4 border-t border-[#1565C0]">
+        <div className="flex items-center justify-between text-white">
           {!collapsed && (
             <div className="flex flex-col">
               <span className="text-sm font-medium">Admin</span>
@@ -113,7 +113,7 @@ export const Sidebar = ({ collapsed }: SidebarProps) => {
             </div>
           )}
           {!collapsed && (
-            <Button variant="ghost" size="sm" onClick={() => signOut()}>
+            <Button variant="ghost" size="sm" onClick={() => signOut()} className="text-white hover:bg-[#1565C0]">
               Sair
             </Button>
           )}

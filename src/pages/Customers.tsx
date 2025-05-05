@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import {
   Card,
@@ -7,6 +6,13 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -17,284 +23,385 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Users, Search, Calendar } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { 
+  Package, 
+  Search, 
+  Filter, 
+  Calendar,
+  BarChart2,
+  Clock,
+  TrendingUp,
+  CheckCircle,
+  AlertCircle,
+  Users,
+  UserPlus,
+  Mail,
+  Phone,
+  MapPin,
+  MoreHorizontal
+} from "lucide-react";
+import { toast } from "@/components/ui/sonner";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
+import { motion } from "framer-motion";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
 
-// Mock customer data
+// Mock data for customers
 const customerData = [
   {
-    id: "CUST-001",
+    id: "C001",
     name: "João Silva",
-    email: "joao.silva@exemplo.com",
+    email: "joao.silva@example.com",
+    phone: "(11) 98765-4321",
+    address: "Rua das Flores, 123 - São Paulo, SP",
     orders: 5,
-    totalSpent: "R$ 850,90",
-    lastOrder: "2023-05-01",
-    addresses: [
-      {
-        street: "Rua das Flores, 123",
-        city: "São Paulo",
-        state: "SP",
-        zipcode: "01234-567"
-      }
-    ]
+    totalSpent: 1250.75,
+    lastOrder: "2023-05-15",
+    status: "active"
   },
   {
-    id: "CUST-002",
+    id: "C002",
     name: "Maria Oliveira",
-    email: "maria.oliveira@exemplo.com",
+    email: "maria.oliveira@example.com",
+    phone: "(21) 98765-1234",
+    address: "Av. Atlântica, 456 - Rio de Janeiro, RJ",
     orders: 3,
-    totalSpent: "R$ 325,50",
-    lastOrder: "2023-04-28",
-    addresses: [
-      {
-        street: "Avenida Brasil, 789",
-        city: "Rio de Janeiro",
-        state: "RJ",
-        zipcode: "20000-000"
-      }
-    ]
+    totalSpent: 780.50,
+    lastOrder: "2023-06-02",
+    status: "active"
   },
   {
-    id: "CUST-003",
+    id: "C003",
     name: "Carlos Santos",
-    email: "carlos.santos@exemplo.com",
-    orders: 8,
-    totalSpent: "R$ 1.250,75",
-    lastOrder: "2023-05-03",
-    addresses: [
-      {
-        street: "Rua dos Pinheiros, 456",
-        city: "Curitiba",
-        state: "PR",
-        zipcode: "80000-000"
-      }
-    ]
+    email: "carlos.santos@example.com",
+    phone: "(31) 97654-3210",
+    address: "Rua das Acácias, 789 - Belo Horizonte, MG",
+    orders: 1,
+    totalSpent: 350.25,
+    lastOrder: "2023-06-10",
+    status: "inactive"
   },
   {
-    id: "CUST-004",
+    id: "C004",
     name: "Ana Pereira",
-    email: "ana.pereira@exemplo.com",
-    orders: 2,
-    totalSpent: "R$ 178,90",
-    lastOrder: "2023-04-15",
-    addresses: [
-      {
-        street: "Rua das Palmeiras, 567",
-        city: "Belo Horizonte",
-        state: "MG",
-        zipcode: "30000-000"
-      }
-    ]
+    email: "ana.pereira@example.com",
+    phone: "(41) 99876-5432",
+    address: "Rua XV de Novembro, 1010 - Curitiba, PR",
+    orders: 8,
+    totalSpent: 2150.00,
+    lastOrder: "2023-05-28",
+    status: "active"
   },
   {
-    id: "CUST-005",
-    name: "Roberto Almeida",
-    email: "roberto.almeida@exemplo.com",
-    orders: 6,
-    totalSpent: "R$ 975,25",
-    lastOrder: "2023-05-02",
-    addresses: [
-      {
-        street: "Avenida Paulista, 1000",
-        city: "São Paulo",
-        state: "SP",
-        zipcode: "01310-100"
-      }
-    ]
+    id: "C005",
+    name: "Paulo Costa",
+    email: "paulo.costa@example.com",
+    phone: "(51) 98765-8765",
+    address: "Av. Ipiranga, 1234 - Porto Alegre, RS",
+    orders: 2,
+    totalSpent: 520.75,
+    lastOrder: "2023-04-15",
+    status: "inactive"
   }
 ];
 
+type Customer = {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  orders: number;
+  totalSpent: number;
+  lastOrder: string;
+  status: "active" | "inactive";
+};
+
 const Customers = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const { toast } = useToast();
+  const [statusFilter, setStatusFilter] = useState("");
+  const [activeTab, setActiveTab] = useState("all");
 
-  const filteredCustomers = customerData.filter(customer => 
-    customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    customer.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredCustomers = customerData.filter(customer => {
+    const matchesSearch = customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        customer.id.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = statusFilter === "" || customer.status === statusFilter;
+    const matchesTab = activeTab === "all" || 
+                      (activeTab === "active" && customer.status === "active") ||
+                      (activeTab === "inactive" && customer.status === "inactive");
+    
+    return matchesSearch && matchesStatus && matchesTab;
+  });
 
-  const handleCustomerClick = (customerId: string) => {
-    // In a real app, this would navigate to customer details
-    toast({
-      title: "Detalhes do Cliente",
-      description: `Visualizando cliente ${customerId}`,
-    });
+  const getStatusClass = (status: string) => {
+    switch (status) {
+      case "active":
+        return "bg-green-100 text-green-800";
+      case "inactive":
+        return "bg-gray-100 text-gray-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
   };
 
-  const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr);
+  const handleCustomerClick = (customerId: string) => {
+    toast("Visualizando cliente " + customerId);
+  };
+
+  const handleCreateCustomer = () => {
+    toast("Criando novo cliente...");
+  };
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(value);
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
     return new Intl.DateTimeFormat('pt-BR').format(date);
   };
 
   return (
-    <div className="animate-fade-in space-y-6">
+    <motion.div 
+      className="space-y-6"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900">Clientes</h1>
-        <Button>
-          <Users className="mr-2 h-4 w-4" />
-          Adicionar Cliente
-        </Button>
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Clientes</h1>
+          <p className="text-gray-500 mt-1">Gerencie e acompanhe seus clientes</p>
+        </div>
+        <div className="flex gap-2">
+          <Button onClick={handleCreateCustomer}>
+            <UserPlus className="mr-2 h-4 w-4" />
+            Novo Cliente
+          </Button>
+          <Button variant="outline">
+            <Filter className="mr-2 h-4 w-4" />
+            Filtros
+          </Button>
+        </div>
       </div>
 
-      <Card>
-        <CardHeader className="bg-gray-50 border-b">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <div>
-              <CardTitle className="flex items-center">
-                <Users className="mr-2 h-5 w-5 text-[#FF5722]" />
-                Gerenciamento de Clientes
-              </CardTitle>
-              <CardDescription className="mt-1">
-                Visualize e gerencie todos os clientes cadastrados
-              </CardDescription>
-            </div>
-            <div className="relative">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
-              <Input
-                type="search"
-                placeholder="Buscar por nome ou email"
-                className="w-full md:w-[300px] pl-9"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>ID</TableHead>
-                  <TableHead>Nome</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Pedidos</TableHead>
-                  <TableHead>Total Gasto</TableHead>
-                  <TableHead>Último Pedido</TableHead>
-                  <TableHead>Endereço</TableHead>
-                  <TableHead className="text-right">Ações</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredCustomers.length > 0 ? (
-                  filteredCustomers.map((customer) => (
-                    <TableRow 
-                      key={customer.id} 
-                      className="cursor-pointer hover:bg-gray-50"
-                      onClick={() => handleCustomerClick(customer.id)}
-                    >
-                      <TableCell className="font-medium">{customer.id}</TableCell>
-                      <TableCell>{customer.name}</TableCell>
-                      <TableCell>{customer.email}</TableCell>
-                      <TableCell>{customer.orders}</TableCell>
-                      <TableCell>{customer.totalSpent}</TableCell>
-                      <TableCell className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-gray-500" /> 
-                        {formatDate(customer.lastOrder)}
-                      </TableCell>
-                      <TableCell>
-                        {customer.addresses.length > 0 && (
-                          <HoverCard>
-                            <HoverCardTrigger asChild>
-                              <Button variant="link" size="sm" className="p-0 h-auto">
-                                Ver endereço
-                              </Button>
-                            </HoverCardTrigger>
-                            <HoverCardContent className="w-80">
-                              <div className="space-y-1">
-                                <h4 className="text-sm font-semibold">Endereço de Entrega</h4>
-                                <p className="text-sm">{customer.addresses[0].street}</p>
-                                <p className="text-sm">
-                                  {customer.addresses[0].city}, {customer.addresses[0].state} - {customer.addresses[0].zipcode}
-                                </p>
-                              </div>
-                            </HoverCardContent>
-                          </HoverCard>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button variant="outline" size="sm">Ver Detalhes</Button>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={8} className="h-24 text-center">
-                      Nenhum cliente encontrado.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </CardContent>
-      </Card>
+      <Tabs defaultValue="all" className="w-full" onValueChange={setActiveTab}>
+        <TabsList className="grid grid-cols-3 mb-4">
+          <TabsTrigger value="all">Todos os Clientes</TabsTrigger>
+          <TabsTrigger value="active">Ativos</TabsTrigger>
+          <TabsTrigger value="inactive">Inativos</TabsTrigger>
+        </TabsList>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Clientes Frequentes</CardTitle>
-            <CardDescription>Top 5 clientes com mais compras</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {customerData
-                .sort((a, b) => b.orders - a.orders)
-                .slice(0, 5)
-                .map((customer, index) => (
-                  <div key={customer.id} className="flex items-center justify-between pb-2 border-b last:border-0">
-                    <div className="flex items-center gap-3">
-                      <div className="bg-[#FF5722] text-white h-8 w-8 rounded-full flex items-center justify-center font-semibold">
-                        {index + 1}
-                      </div>
-                      <div>
-                        <div className="font-medium">{customer.name}</div>
-                        <div className="text-sm text-gray-500">{customer.email}</div>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="font-medium">{customer.orders} pedidos</div>
-                      <div className="text-sm text-gray-500">{customer.totalSpent}</div>
-                    </div>
+        <TabsContent value={activeTab} className="mt-0">
+          <Card>
+            <CardHeader className="bg-gray-50 border-b">
+              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                <CardTitle className="flex items-center">
+                  <Users className="mr-2 h-5 w-5 text-primary" />
+                  Gerenciamento de Clientes
+                </CardTitle>
+                <div className="flex flex-col md:flex-row gap-2 md:gap-4">
+                  <div className="relative">
+                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
+                    <Input
+                      type="search"
+                      placeholder="Buscar cliente por nome, email ou ID"
+                      className="w-full md:w-[300px] pl-9"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
                   </div>
-                ))}
-            </div>
-          </CardContent>
-        </Card>
+                  <Select value={statusFilter} onValueChange={setStatusFilter}>
+                    <SelectTrigger className="w-full md:w-[180px]">
+                      <SelectValue placeholder="Status do Cliente" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">Todos os Status</SelectItem>
+                      <SelectItem value="active">Ativo</SelectItem>
+                      <SelectItem value="inactive">Inativo</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="p-0">
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>ID</TableHead>
+                      <TableHead>Cliente</TableHead>
+                      <TableHead>Contato</TableHead>
+                      <TableHead>Pedidos</TableHead>
+                      <TableHead>Total Gasto</TableHead>
+                      <TableHead>Último Pedido</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead className="text-right">Ações</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredCustomers.length > 0 ? (
+                      filteredCustomers.map((customer) => (
+                        <TableRow 
+                          key={customer.id} 
+                          className="cursor-pointer hover:bg-gray-50"
+                          onClick={() => handleCustomerClick(customer.id)}
+                        >
+                          <TableCell className="font-medium">{customer.id}</TableCell>
+                          <TableCell>
+                            <div className="font-medium">{customer.name}</div>
+                            <div className="text-sm text-gray-500 truncate max-w-[200px]">{customer.address}</div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center text-sm text-gray-500">
+                              <Mail className="h-3 w-3 mr-1" />
+                              {customer.email}
+                            </div>
+                            <div className="flex items-center text-sm text-gray-500">
+                              <Phone className="h-3 w-3 mr-1" />
+                              {customer.phone}
+                            </div>
+                          </TableCell>
+                          <TableCell>{customer.orders}</TableCell>
+                          <TableCell>{formatCurrency(customer.totalSpent)}</TableCell>
+                          <TableCell>{formatDate(customer.lastOrder)}</TableCell>
+                          <TableCell>
+                            <Badge className={getStatusClass(customer.status)}>
+                              {customer.status === "active" ? "Ativo" : "Inativo"}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                                <Button variant="ghost" size="sm">
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>Ações</DropdownMenuLabel>
+                                <DropdownMenuItem onClick={(e) => {
+                                  e.stopPropagation();
+                                  toast("Editando cliente " + customer.id);
+                                }}>
+                                  Editar
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={(e) => {
+                                  e.stopPropagation();
+                                  toast("Visualizando pedidos do cliente " + customer.id);
+                                }}>
+                                  Ver Pedidos
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem 
+                                  className="text-red-600"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    toast("Cliente " + customer.id + " desativado");
+                                  }}
+                                >
+                                  {customer.status === "active" ? "Desativar" : "Ativar"}
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={8} className="h-64 text-center">
+                          <div className="flex flex-col items-center justify-center p-6">
+                            <div className="bg-gray-50 p-4 rounded-full mb-4">
+                              <Users className="h-12 w-12 text-gray-400" />
+                            </div>
+                            <h3 className="text-lg font-medium mb-2">Nenhum cliente encontrado</h3>
+                            <p className="text-gray-500 text-center max-w-md mb-4">
+                              Não há clientes registrados com os filtros atuais. Você pode criar um novo cliente ou ajustar os filtros.
+                            </p>
+                            <Button onClick={handleCreateCustomer}>
+                              <UserPlus className="mr-2 h-4 w-4" />
+                              Criar Novo Cliente
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Estatísticas de Clientes</CardTitle>
-            <CardDescription>Visão geral dos clientes cadastrados</CardDescription>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card className="transition-all hover:shadow-md">
+          <CardHeader className="pb-2">
+            <CardDescription className="text-xs uppercase font-semibold text-gray-500">Total de Clientes</CardDescription>
+            <div className="flex justify-between items-center">
+              <CardTitle className="text-2xl">{customerData.length}</CardTitle>
+              <div className="p-1.5 bg-blue-50 rounded-full">
+                <Users className="h-5 w-5 text-blue-500" />
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="bg-white p-4 rounded-lg border shadow-sm">
-                <div className="text-sm font-medium text-gray-500">Total de Clientes</div>
-                <div className="text-2xl font-bold mt-1">127</div>
-                <div className="text-xs text-green-600 mt-1">+12% este mês</div>
-              </div>
-              <div className="bg-white p-4 rounded-lg border shadow-sm">
-                <div className="text-sm font-medium text-gray-500">Novos Clientes (30 dias)</div>
-                <div className="text-2xl font-bold mt-1">18</div>
-                <div className="text-xs text-green-600 mt-1">+5% em relação ao mês anterior</div>
-              </div>
-              <div className="bg-white p-4 rounded-lg border shadow-sm">
-                <div className="text-sm font-medium text-gray-500">Ticket Médio</div>
-                <div className="text-2xl font-bold mt-1">R$ 185,50</div>
-                <div className="text-xs text-red-600 mt-1">-2% em relação ao mês anterior</div>
-              </div>
-              <div className="bg-white p-4 rounded-lg border shadow-sm">
-                <div className="text-sm font-medium text-gray-500">Taxa de Retorno</div>
-                <div className="text-2xl font-bold mt-1">68%</div>
-                <div className="text-xs text-green-600 mt-1">+3% em relação ao mês anterior</div>
+            <p className="text-xs text-gray-500">
+              {customerData.filter(c => c.status === "active").length} ativos, {customerData.filter(c => c.status === "inactive").length} inativos
+            </p>
+          </CardContent>
+        </Card>
+        <Card className="transition-all hover:shadow-md">
+          <CardHeader className="pb-2">
+            <CardDescription className="text-xs uppercase font-semibold text-gray-500">Clientes Ativos</CardDescription>
+            <div className="flex justify-between items-center">
+              <CardTitle className="text-2xl">{customerData.filter(c => c.status === "active").length}</CardTitle>
+              <div className="p-1.5 bg-green-50 rounded-full">
+                <CheckCircle className="h-5 w-5 text-green-500" />
               </div>
             </div>
+          </CardHeader>
+          <CardContent>
+            <p className="text-xs text-gray-500">
+              {Math.round((customerData.filter(c => c.status === "active").length / customerData.length) * 100)}% do total de clientes
+            </p>
+          </CardContent>
+        </Card>
+        <Card className="transition-all hover:shadow-md">
+          <CardHeader className="pb-2">
+            <CardDescription className="text-xs uppercase font-semibold text-gray-500">Total em Vendas</CardDescription>
+            <div className="flex justify-between items-center">
+              <CardTitle className="text-2xl">
+                {formatCurrency(customerData.reduce((acc, customer) => acc + customer.totalSpent, 0))}
+              </CardTitle>
+              <div className="p-1.5 bg-purple-50 rounded-full">
+                <BarChart2 className="h-5 w-5 text-purple-500" />
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <p className="text-xs text-gray-500">
+              Média de {formatCurrency(customerData.reduce((acc, customer) => acc + customer.totalSpent, 0) / customerData.length)} por cliente
+            </p>
           </CardContent>
         </Card>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

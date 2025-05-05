@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { MainLayout } from "./components/Layout/MainLayout";
+import { StoreLayout } from "./components/Layout/StoreLayout";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
 import Products from "./pages/Products";
 import Orders from "./pages/Orders";
@@ -15,6 +16,12 @@ import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import NewProduct from "./pages/NewProduct";
 import EditProduct from "./pages/EditProduct";
+
+// Store Pages
+import HomePage from "./pages/Store/HomePage";
+import LoginPage from "./pages/Store/LoginPage";
+import ProductPage from "./pages/Store/ProductPage";
+import ProductListPage from "./pages/Store/ProductListPage";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +44,7 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 const AppRoutes = () => {
   return (
     <Routes>
+      {/* Admin Routes */}
       <Route path="/login" element={<Login />} />
       <Route
         path="/"
@@ -118,6 +126,42 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+
+      {/* Store Front (Customer) Routes */}
+      <Route
+        path="/store"
+        element={
+          <StoreLayout>
+            <HomePage />
+          </StoreLayout>
+        }
+      />
+      <Route
+        path="/store/login"
+        element={
+          <StoreLayout>
+            <LoginPage />
+          </StoreLayout>
+        }
+      />
+      <Route
+        path="/store/produtos"
+        element={
+          <StoreLayout>
+            <ProductListPage />
+          </StoreLayout>
+        }
+      />
+      <Route
+        path="/store/produto/:id"
+        element={
+          <StoreLayout>
+            <ProductPage />
+          </StoreLayout>
+        }
+      />
+
+      {/* 404 Route */}
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

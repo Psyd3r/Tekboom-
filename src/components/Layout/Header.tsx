@@ -16,7 +16,7 @@ interface HeaderProps {
 
 export const Header = ({ onToggleSidebar, sidebarCollapsed }: HeaderProps) => {
   return (
-    <header className="h-16 border-b border-gray-200 bg-white flex items-center px-4 justify-between">
+    <header className="h-16 border-b border-[#ECEFF1] bg-white flex items-center px-4 justify-between">
       <div className="flex items-center">
         <Button
           variant="ghost"
@@ -25,17 +25,17 @@ export const Header = ({ onToggleSidebar, sidebarCollapsed }: HeaderProps) => {
           className="mr-4"
         >
           {sidebarCollapsed ? (
-            <ChevronRight className="h-5 w-5" />
+            <ChevronRight className="h-5 w-5 text-[#546E7A]" />
           ) : (
-            <ChevronLeft className="h-5 w-5" />
+            <ChevronLeft className="h-5 w-5 text-[#546E7A]" />
           )}
         </Button>
         <div className="relative max-w-md w-96">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" />
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-[#546E7A]" />
           <Input
             type="search"
             placeholder="Buscar..."
-            className="pl-8 bg-gray-50 border-0"
+            className="pl-8 bg-[#F5F9FF] border-[#ECEFF1] focus-visible:ring-[#1E88E5]"
           />
         </div>
       </div>
@@ -43,31 +43,31 @@ export const Header = ({ onToggleSidebar, sidebarCollapsed }: HeaderProps) => {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon" className="relative">
-              <Bell className="h-4 w-4" />
-              <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-white">
+              <Bell className="h-4 w-4 text-[#546E7A]" />
+              <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#1E88E5] text-[10px] text-white">
                 3
               </span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-80">
             <div className="p-2 font-medium">Notificações</div>
-            <div className="border-t" />
-            <DropdownMenuItem className="p-3 cursor-pointer">
+            <div className="border-t border-[#ECEFF1]" />
+            <DropdownMenuItem className="p-3 cursor-pointer hover:bg-[#F5F9FF]">
               <div className="flex flex-col">
-                <span className="font-medium">Novo pedido recebido</span>
-                <span className="text-sm text-gray-500">Há 5 minutos</span>
+                <span className="font-medium text-[#263238]">Novo pedido recebido</span>
+                <span className="text-sm text-[#546E7A]">Há 5 minutos</span>
               </div>
             </DropdownMenuItem>
-            <DropdownMenuItem className="p-3 cursor-pointer">
+            <DropdownMenuItem className="p-3 cursor-pointer hover:bg-[#F5F9FF]">
               <div className="flex flex-col">
-                <span className="font-medium">Estoque baixo: Produto XYZ</span>
-                <span className="text-sm text-gray-500">Há 30 minutos</span>
+                <span className="font-medium text-[#263238]">Estoque baixo: Produto XYZ</span>
+                <span className="text-sm text-[#546E7A]">Há 30 minutos</span>
               </div>
             </DropdownMenuItem>
-            <DropdownMenuItem className="p-3 cursor-pointer">
+            <DropdownMenuItem className="p-3 cursor-pointer hover:bg-[#F5F9FF]">
               <div className="flex flex-col">
-                <span className="font-medium">Pagamento confirmado</span>
-                <span className="text-sm text-gray-500">Há 1 hora</span>
+                <span className="font-medium text-[#263238]">Pagamento confirmado</span>
+                <span className="text-sm text-[#546E7A]">Há 1 hora</span>
               </div>
             </DropdownMenuItem>
           </DropdownMenuContent>

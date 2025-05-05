@@ -26,31 +26,31 @@ export default {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				primary: {
-					DEFAULT: '#FF5722',
-					hover: '#E64A19',
+					DEFAULT: '#1E88E5',
+					hover: '#1976D2',
 					foreground: '#FFFFFF'
 				},
 				secondary: {
-					DEFAULT: '#2C2C2C',
-					hover: '#1F1F1F',
+					DEFAULT: '#0D47A1',
+					hover: '#0A3D8F',
 					foreground: '#FFFFFF'
 				},
 				tertiary: {
 					DEFAULT: '#FFFFFF',
-					hover: '#F5F5F5',
-					foreground: '#2C2C2C'
+					hover: '#F5F9FF',
+					foreground: '#263238'
 				},
 				destructive: {
-					DEFAULT: 'hsl(var(--destructive))',
-					foreground: 'hsl(var(--destructive-foreground))'
+					DEFAULT: '#E53935',
+					foreground: '#FFFFFF'
 				},
 				muted: {
-					DEFAULT: 'hsl(var(--muted))',
-					foreground: 'hsl(var(--muted-foreground))'
+					DEFAULT: '#ECEFF1',
+					foreground: '#546E7A'
 				},
 				accent: {
-					DEFAULT: '#F5F5F5',
-					foreground: '#2C2C2C'
+					DEFAULT: '#64B5F6',
+					foreground: '#0D47A1'
 				},
 				popover: {
 					DEFAULT: 'hsl(var(--popover))',
@@ -61,15 +61,19 @@ export default {
 					foreground: 'hsl(var(--card-foreground))'
 				},
 				sidebar: {
-					DEFAULT: '#2C2C2C',
+					DEFAULT: '#0D47A1',
 					foreground: '#FFFFFF',
-					primary: '#FF5722',
+					primary: '#1E88E5',
 					'primary-foreground': '#FFFFFF',
-					accent: '#3D3D3D',
+					accent: '#1565C0',
 					'accent-foreground': '#FFFFFF',
-					border: '#3D3D3D',
-					ring: '#FF5722'
-				}
+					border: '#1565C0',
+					ring: '#64B5F6'
+				},
+				success: '#26A69A',
+				warning: '#FFA000',
+				error: '#E53935',
+				info: '#29B6F6'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -115,6 +119,10 @@ export default {
 			},
 			transitionDuration: {
 				'300': '300ms'
+			},
+			backgroundImage: {
+				'gradient-primary': 'linear-gradient(135deg, #1E88E5 0%, #0D47A1 100%)',
+				'gradient-light': 'linear-gradient(135deg, #64B5F6 0%, #1E88E5 100%)'
 			}
 		}
 	},
