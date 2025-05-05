@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -17,7 +18,6 @@ import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import NewProduct from "./pages/NewProduct";
 import EditProduct from "./pages/EditProduct";
-import StockManagement from "./pages/StockManagement";
 
 // Store Pages
 import HomePage from "./pages/Store/HomePage";
@@ -26,7 +26,6 @@ import ProductPage from "./pages/Store/ProductPage";
 import ProductListPage from "./pages/Store/ProductListPage";
 import CartPage from "./pages/Store/CartPage";
 import CheckoutPage from "./pages/Store/CheckoutPage";
-import CustomerProfilePage from "./pages/Store/CustomerProfilePage";
 
 const queryClient = new QueryClient();
 
@@ -106,16 +105,6 @@ const AppRoutes = () => {
           <AdminRoute>
             <MainLayout>
               <EditProduct />
-            </MainLayout>
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/estoque"
-        element={
-          <AdminRoute>
-            <MainLayout>
-              <StockManagement />
             </MainLayout>
           </AdminRoute>
         }
@@ -217,14 +206,6 @@ const AppRoutes = () => {
         element={
           <StoreLayout requireAuth={true}>
             <CheckoutPage />
-          </StoreLayout>
-        }
-      />
-      <Route
-        path="/store/minha-conta"
-        element={
-          <StoreLayout requireAuth={true}>
-            <CustomerProfilePage />
           </StoreLayout>
         }
       />
