@@ -147,6 +147,42 @@ export type Database = {
         }
         Relationships: []
       }
+      pc_components: {
+        Row: {
+          compatibility: string[] | null
+          created_at: string
+          id: string
+          image: string
+          name: string
+          price: number
+          specs: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          compatibility?: string[] | null
+          created_at?: string
+          id?: string
+          image: string
+          name: string
+          price: number
+          specs: string
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          compatibility?: string[] | null
+          created_at?: string
+          id?: string
+          image?: string
+          name?: string
+          price?: number
+          specs?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           category: string | null

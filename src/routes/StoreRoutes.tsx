@@ -14,6 +14,7 @@ import FavoritesPage from "@/pages/Store/FavoritesPage";
 import OrderHistoryPage from "@/pages/Store/OrderHistoryPage";
 import BuildPcPage from "@/pages/Store/BuildPcPage";
 import OffersPage from "@/pages/Store/OffersPage";
+import CategoriesPage from "@/pages/Store/CategoriesPage";
 
 export const storeRoutes = (
   <>
@@ -54,6 +55,14 @@ export const storeRoutes = (
       element={
         <StoreLayout>
           <ProductListPage />
+        </StoreLayout>
+      }
+    />
+    <Route
+      path="/store/categorias"
+      element={
+        <StoreLayout>
+          <CategoriesPage />
         </StoreLayout>
       }
     />

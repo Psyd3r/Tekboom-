@@ -134,7 +134,7 @@ const ProductListPage = () => {
   const getCurrentCategoryName = () => {
     if (!categoryId) return "";
     const category = categories.find(c => c.id === categoryId);
-    return category ? category.name : categoryId;
+    return category ? category.name : "Categoria";
   };
 
   // Handler to clear filters

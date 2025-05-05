@@ -7,7 +7,6 @@ import { useCart } from "@/context/CartContext";
 
 import { ComponentSelector } from "@/components/Store/BuildPC/ComponentSelector";
 import { SelectedComponentsList } from "@/components/Store/BuildPC/SelectedComponentsList";
-import { mockComponents } from "@/components/Store/BuildPC/PCComponentData";
 import { BuildPCSummary } from "@/components/Store/BuildPC/BuildPCSummary";
 import { 
   checkCompatibility, 
@@ -15,6 +14,7 @@ import {
   calculateTotalPrice 
 } from "@/components/Store/BuildPC/CompatibilityHelper";
 import { ComponentType, PCComponent, SelectedComponents } from "@/types/buildpc";
+import { useFetchPCComponents } from "@/hooks/pc/useFetchPCComponents";
 
 const BuildPcPage = () => {
   const [selectedTab, setSelectedTab] = useState<ComponentType>("cpu");
@@ -33,16 +33,16 @@ const BuildPcPage = () => {
   
   const { addToCart } = useCart();
   
-  // Filtrar componentes pelo tipo selecionado
-  const filteredComponents = mockComponents.filter(component => component.type === selectedTab);
+  // Fetch components for the selected type
+  const { data: components = [], isLoading: isLoadingComponents } = useFetchPCComponents(selectedTab);
   
-  // Calcular o preço total
+  // Calculate the total price
   const totalPrice = calculateTotalPrice(selectedComponents);
   
-  // Verificar se todos os componentes essenciais foram selecionados
+  // Check if all essential components are selected
   const essentialComponentsSelected = hasEssentialComponents(selectedComponents);
   
-  // Função para selecionar um componente
+  // Function to select a component
   const selectComponent = (component: PCComponent) => {
     setSelectedComponents({
       ...selectedComponents,
@@ -50,7 +50,7 @@ const BuildPcPage = () => {
     });
   };
   
-  // Função para remover um componente selecionado
+  // Function to remove a component
   const removeComponent = (type: ComponentType) => {
     setSelectedComponents({
       ...selectedComponents,
@@ -58,7 +58,7 @@ const BuildPcPage = () => {
     });
   };
   
-  // Função para adicionar todos os componentes ao carrinho
+  // Function to add all components to cart
   const addAllToCart = () => {
     Object.values(selectedComponents).forEach(component => {
       if (component) {
@@ -77,13 +77,13 @@ const BuildPcPage = () => {
     toast.success("Montagem adicionada ao carrinho!");
   };
   
-  // Verificar compatibilidade
+  // Check compatibility
   const isCompatible = checkCompatibility(selectedComponents);
 
   return (
     <div className="container mx-auto py-6">
       <div className="flex flex-col lg:flex-row gap-6">
-        {/* Componentes selecionados */}
+        {/* Selected components */}
         <div className="w-full lg:w-1/3">
           <Card>
             <CardHeader>
@@ -107,7 +107,7 @@ const BuildPcPage = () => {
           </Card>
         </div>
 
-        {/* Seleção de componentes */}
+        {/* Component selection */}
         <div className="w-full lg:w-2/3">
           <Card>
             <CardHeader>
@@ -120,7 +120,8 @@ const BuildPcPage = () => {
                   selectedTab={selectedTab}
                   setSelectedTab={setSelectedTab}
                   selectedComponents={selectedComponents}
-                  filteredComponents={filteredComponents}
+                  components={components}
+                  isLoading={isLoadingComponents}
                   selectComponent={selectComponent}
                 />
               </Tabs>
