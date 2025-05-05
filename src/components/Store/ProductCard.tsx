@@ -83,6 +83,7 @@ export const ProductCard = ({
         image,
         total: price
       });
+      toast.success("Produto adicionado ao carrinho");
     } else {
       toast("Produto já está no carrinho");
     }

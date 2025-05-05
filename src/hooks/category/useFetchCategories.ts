@@ -15,7 +15,7 @@ export const useFetchCategories = () => {
         .order("name");
 
       if (categoriesError) {
-        toast("Erro ao carregar categorias", { 
+        toast.error("Erro ao carregar categorias", { 
           description: categoriesError.message 
         });
         throw categoriesError;
@@ -28,7 +28,7 @@ export const useFetchCategories = () => {
         .not("category", "is", null);
 
       if (productCategoriesError) {
-        toast("Erro ao carregar categorias de produtos", { 
+        toast.error("Erro ao carregar categorias de produtos", { 
           description: productCategoriesError.message 
         });
         throw productCategoriesError;
