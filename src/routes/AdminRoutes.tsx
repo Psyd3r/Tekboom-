@@ -33,109 +33,107 @@ export const AdminRoute = ({ children }: { children: JSX.Element }) => {
   return children;
 };
 
-export const AdminRoutes = () => {
-  return (
-    <>
-      <Route
-        path="/"
-        element={
-          <AdminRoute>
-            <MainLayout>
-              <Products />
-            </MainLayout>
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/produtos"
-        element={
-          <AdminRoute>
-            <MainLayout>
-              <Products />
-            </MainLayout>
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/produtos/novo"
-        element={
-          <AdminRoute>
-            <MainLayout>
-              <NewProduct />
-            </MainLayout>
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/produtos/:id/editar"
-        element={
-          <AdminRoute>
-            <MainLayout>
-              <EditProduct />
-            </MainLayout>
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/estoque"
-        element={
-          <AdminRoute>
-            <MainLayout>
-              <StockManagement />
-            </MainLayout>
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/pedidos"
-        element={
-          <AdminRoute>
-            <MainLayout>
-              <Orders />
-            </MainLayout>
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/pedidos/novo"
-        element={
-          <AdminRoute>
-            <MainLayout>
-              <NewOrder />
-            </MainLayout>
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/clientes"
-        element={
-          <AdminRoute>
-            <MainLayout>
-              <Customers />
-            </MainLayout>
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/configuracoes"
-        element={
-          <AdminRoute>
-            <MainLayout>
-              <Settings />
-            </MainLayout>
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/usuarios"
-        element={
-          <AdminRoute>
-            <MainLayout>
-              <Users />
-            </MainLayout>
-          </AdminRoute>
-        }
-      />
-    </>
-  );
-};
+export const adminRoutes = (
+  <>
+    <Route
+      path="/"
+      element={
+        <AdminRoute>
+          <MainLayout>
+            <Products />
+          </MainLayout>
+        </AdminRoute>
+      }
+    />
+    <Route
+      path="/produtos"
+      element={
+        <AdminRoute>
+          <MainLayout>
+            <Products />
+          </MainLayout>
+        </AdminRoute>
+      }
+    />
+    <Route
+      path="/produtos/novo"
+      element={
+        <AdminRoute>
+          <MainLayout>
+            <NewProduct />
+          </MainLayout>
+        </AdminRoute>
+      }
+    />
+    <Route
+      path="/produtos/:id/editar"
+      element={
+        <AdminRoute>
+          <MainLayout>
+            <EditProduct />
+          </MainLayout>
+        </AdminRoute>
+      }
+    />
+    <Route
+      path="/estoque"
+      element={
+        <AdminRoute>
+          <MainLayout>
+            <StockManagement />
+          </MainLayout>
+        </AdminRoute>
+      }
+    />
+    <Route
+      path="/pedidos"
+      element={
+        <AdminRoute>
+          <MainLayout>
+            <Orders />
+          </MainLayout>
+        </AdminRoute>
+      }
+    />
+    <Route
+      path="/pedidos/novo"
+      element={
+        <AdminRoute>
+          <MainLayout>
+            <NewOrder />
+          </MainLayout>
+        </AdminRoute>
+      }
+    />
+    <Route
+      path="/clientes"
+      element={
+        <AdminRoute>
+          <MainLayout>
+            <Customers />
+          </MainLayout>
+        </AdminRoute>
+      }
+    />
+    <Route
+      path="/configuracoes"
+      element={
+        <AdminRoute>
+          <MainLayout>
+            <Settings />
+          </MainLayout>
+        </AdminRoute>
+      }
+    />
+    <Route
+      path="/usuarios"
+      element={
+        <AdminRoute>
+          <MainLayout>
+            <Users />
+          </MainLayout>
+        </AdminRoute>
+      }
+    />
+  </>
+);
