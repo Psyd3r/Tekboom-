@@ -11,9 +11,6 @@ import ProductListPage from "@/pages/Store/ProductListPage";
 import CartPage from "@/pages/Store/CartPage";
 import CheckoutPage from "@/pages/Store/CheckoutPage";
 import CustomerProfilePage from "@/pages/Store/CustomerProfilePage";
-import FavoritesPage from "@/pages/Store/FavoritesPage";
-import OrderHistoryPage from "@/pages/Store/OrderHistoryPage";
-import BuildPcPage from "@/pages/Store/BuildPcPage";
 
 export const storeRoutes = (
   <>
@@ -50,14 +47,6 @@ export const storeRoutes = (
       }
     />
     <Route
-      path="/store/categoria/:id"
-      element={
-        <StoreLayout>
-          <ProductListPage />
-        </StoreLayout>
-      }
-    />
-    <Route
       path="/store/carrinho"
       element={
         <StoreLayout>
@@ -78,41 +67,6 @@ export const storeRoutes = (
       element={
         <StoreLayout requireAuth={true}>
           <CustomerProfilePage />
-        </StoreLayout>
-      }
-    />
-    <Route
-      path="/store/favoritos"
-      element={
-        <StoreLayout requireAuth={true}>
-          <FavoritesPage />
-        </StoreLayout>
-      }
-    />
-    <Route
-      path="/store/historico"
-      element={
-        <StoreLayout requireAuth={true}>
-          <OrderHistoryPage />
-        </StoreLayout>
-      }
-    />
-    <Route
-      path="/store/monteseupc"
-      element={
-        <StoreLayout>
-          <BuildPcPage />
-        </StoreLayout>
-      }
-    />
-    <Route
-      path="/store/ofertas"
-      element={
-        <StoreLayout>
-          <div className="p-8 text-center">
-            <h1 className="text-2xl font-bold mb-4">Ofertas do Dia</h1>
-            <p>Página em desenvolvimento</p>
-          </div>
         </StoreLayout>
       }
     />

@@ -1,11 +1,12 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Heart, ShoppingBag, Star } from "lucide-react";
+import { Heart, ShoppingBag, Star, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { toast } from "@/components/ui/sonner";
+import { useCart } from "@/context/CartContext";
 
 interface ProductCardProps {
   id: string;
@@ -31,6 +32,7 @@ export const ProductCard = ({
   category,
 }: ProductCardProps) => {
   const [isFavorite, setIsFavorite] = useState(false);
+  const { addToCart, isInCart } = useCart();
   
   const formattedPrice = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
@@ -56,10 +58,23 @@ export const ProductCard = ({
     }
   };
   
-  const addToCart = (e: React.MouseEvent) => {
+  const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    toast("Produto adicionado ao carrinho");
+    
+    if (!isInCart(id)) {
+      addToCart({
+        id: crypto.randomUUID(),
+        product_id: id,
+        name,
+        price,
+        quantity: 1,
+        image,
+        total: price
+      });
+    } else {
+      toast("Produto já está no carrinho");
+    }
   };
 
   return (
@@ -135,11 +150,23 @@ export const ProductCard = ({
         
         {/* Add to Cart */}
         <Button 
-          className="w-full flex items-center justify-center gap-2"
-          onClick={addToCart}
+          className={cn(
+            "w-full flex items-center justify-center gap-2",
+            isInCart(id) ? "bg-green-600 hover:bg-green-700" : ""
+          )}
+          onClick={handleAddToCart}
         >
-          <ShoppingBag className="h-4 w-4" />
-          Adicionar
+          {isInCart(id) ? (
+            <>
+              <Check className="h-4 w-4" />
+              No carrinho
+            </>
+          ) : (
+            <>
+              <ShoppingBag className="h-4 w-4" />
+              Adicionar
+            </>
+          )}
         </Button>
       </div>
     </div>
