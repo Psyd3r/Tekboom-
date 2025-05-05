@@ -1,31 +1,41 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Shield } from "lucide-react";
+import { Shield, Store, Mail, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { toast } from "@/components/ui/sonner";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { signIn, user } = useAuth();
+  const { signIn, user, userRole } = useAuth();
   const navigate = useNavigate();
-
+  
   useEffect(() => {
+    // Redirecionar usuários já autenticados
     if (user) {
-      navigate("/");
+      console.log("Login admin - Usuário já autenticado:", user.id, "Papel:", userRole);
+      
+      if (userRole === 'admin') {
+        navigate("/produtos", { replace: true });
+      } else if (userRole === 'customer') {
+        // Se um cliente tentar acessar o login administrativo, redirecionar para a loja
+        navigate("/store", { replace: true });
+      }
     }
-  }, [user, navigate]);
+  }, [user, userRole, navigate]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     try {
       await signIn(email, password);
+      // O redirecionamento é feito dentro da função signIn
     } catch (error) {
       console.error("Login error:", error);
     } finally {
@@ -40,15 +50,19 @@ const Login = () => {
           <div className="flex justify-center mb-4">
             <Shield className="h-10 w-10 text-[#1E88E5]" />
           </div>
-          <CardTitle className="text-2xl">Tekboom Admin</CardTitle>
+          <CardTitle className="text-2xl">Painel Administrativo</CardTitle>
           <CardDescription className="text-[#546E7A]">
-            Entre com suas credenciais para acessar o painel administrativo
+            Acesso unificado - Entre com suas credenciais
           </CardDescription>
         </CardHeader>
-        <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-4">
+        
+        <CardContent className="space-y-4">
+          <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium text-[#263238]">Email</label>
+              <label htmlFor="email" className="text-sm font-medium text-[#263238] flex items-center gap-2">
+                <Mail className="h-4 w-4 text-[#546E7A]" />
+                Email
+              </label>
               <Input
                 id="email"
                 type="email"
@@ -60,7 +74,10 @@ const Login = () => {
               />
             </div>
             <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium text-[#263238]">Senha</label>
+              <label htmlFor="password" className="text-sm font-medium text-[#263238] flex items-center gap-2">
+                <Lock className="h-4 w-4 text-[#546E7A]" />
+                Senha
+              </label>
               <Input
                 id="password"
                 type="password"
@@ -71,17 +88,29 @@ const Login = () => {
                 className="border-[#ECEFF1] focus-visible:ring-[#1E88E5]"
               />
             </div>
-          </CardContent>
-          <CardFooter>
+            
             <Button
               type="submit"
               className="w-full bg-[#1E88E5] hover:bg-[#1976D2]"
               disabled={isLoading}
             >
-              {isLoading ? "Entrando..." : "Entrar"}
+              {isLoading ? "Entrando..." : "Entrar no Sistema"}
             </Button>
-          </CardFooter>
-        </form>
+          </form>
+          
+          <Alert className="bg-blue-50 border border-blue-100">
+            <AlertDescription className="text-sm text-blue-700">
+              Para obter acesso administrativo, entre em contato com o departamento de usuários.
+            </AlertDescription>
+          </Alert>
+        </CardContent>
+        
+        <div className="px-6 py-4 bg-gray-50 text-sm text-gray-600 rounded-b-lg flex justify-center">
+          <div className="flex items-center gap-2">
+            <Store className="h-4 w-4 text-gray-500" />
+            <span>Para acesso à loja, use <a href="/store/login" className="text-[#1E88E5] hover:underline">login de cliente</a></span>
+          </div>
+        </div>
       </Card>
     </div>
   );

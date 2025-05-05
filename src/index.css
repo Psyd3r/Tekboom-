@@ -35,13 +35,14 @@
 
     --radius: 0.5rem;
 
+    /* Updated sidebar colors for better visibility */
     --sidebar-background: 213 86% 34%;
     --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 207 82% 50%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 209 88% 43%;
+    --sidebar-primary: 206 91% 80%;
+    --sidebar-primary-foreground: 213 86% 34%;
+    --sidebar-accent: 207 82% 50%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 209 88% 43%;
+    --sidebar-border: 207 82% 50%;
     --sidebar-ring: 206 91% 68%;
   }
 
@@ -74,13 +75,14 @@
     --input: 200 14% 15%;
     --ring: 206 91% 68%;
 
-    --sidebar-background: 213 86% 34%;
+    /* Updated sidebar colors for better visibility in dark mode */
+    --sidebar-background: 213 86% 30%;
     --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 207 82% 50%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 209 88% 43%;
+    --sidebar-primary: 206 91% 80%;
+    --sidebar-primary-foreground: 213 86% 34%;
+    --sidebar-accent: 207 82% 60%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 209 88% 43%;
+    --sidebar-border: 207 82% 60%;
     --sidebar-ring: 206 91% 68%;
   }
 }
@@ -93,4 +95,18 @@
   body {
     @apply bg-[#F5F9FF] text-[#263238];
   }
+}
+
+/* Add some custom utility classes for mobile sidebar */
+.mobile-sidebar-open {
+  transform: translateX(0) !important;
+}
+
+.mobile-sidebar-closed {
+  transform: translateX(-100%) !important;
+}
+
+/* Add a shadow to make the sidebar stand out more */
+.sidebar-shadow {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
