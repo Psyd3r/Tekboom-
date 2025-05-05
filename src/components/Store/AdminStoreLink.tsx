@@ -6,9 +6,13 @@ import { Button } from "@/components/ui/button";
 export const AdminStoreLink = () => {
   return (
     <Link to="/store">
-      <Button variant="outline" size="sm" className="ml-2">
-        <ShoppingBag className="h-4 w-4 mr-2" />
-        Ir para Loja
+      <Button 
+        variant="outline" 
+        size="sm"
+        className="flex items-center gap-1 bg-white text-blue-600 border-blue-600 hover:bg-blue-50"
+      >
+        <ShoppingBag className="h-4 w-4" />
+        <span>Ir para Loja</span>
       </Button>
     </Link>
   );

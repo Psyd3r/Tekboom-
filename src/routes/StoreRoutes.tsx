@@ -1,7 +1,6 @@
 
 import { Route } from "react-router-dom";
 import { StoreLayout } from "@/components/Layout/StoreLayout";
-import { ProtectedRoute } from "./ProtectedRoute";
 
 // Store Pages
 import HomePage from "@/pages/Store/HomePage";
@@ -11,6 +10,10 @@ import ProductListPage from "@/pages/Store/ProductListPage";
 import CartPage from "@/pages/Store/CartPage";
 import CheckoutPage from "@/pages/Store/CheckoutPage";
 import CustomerProfilePage from "@/pages/Store/CustomerProfilePage";
+import FavoritesPage from "@/pages/Store/FavoritesPage";
+import OrderHistoryPage from "@/pages/Store/OrderHistoryPage";
+import BuildPcPage from "@/pages/Store/BuildPcPage";
+import OffersPage from "@/pages/Store/OffersPage";
 
 export const storeRoutes = (
   <>
@@ -47,6 +50,14 @@ export const storeRoutes = (
       }
     />
     <Route
+      path="/store/categoria/:id"
+      element={
+        <StoreLayout>
+          <ProductListPage />
+        </StoreLayout>
+      }
+    />
+    <Route
       path="/store/carrinho"
       element={
         <StoreLayout>
@@ -67,6 +78,38 @@ export const storeRoutes = (
       element={
         <StoreLayout requireAuth={true}>
           <CustomerProfilePage />
+        </StoreLayout>
+      }
+    />
+    <Route
+      path="/store/favoritos"
+      element={
+        <StoreLayout requireAuth={true}>
+          <FavoritesPage />
+        </StoreLayout>
+      }
+    />
+    <Route
+      path="/store/historico"
+      element={
+        <StoreLayout requireAuth={true}>
+          <OrderHistoryPage />
+        </StoreLayout>
+      }
+    />
+    <Route
+      path="/store/monteseupc"
+      element={
+        <StoreLayout>
+          <BuildPcPage />
+        </StoreLayout>
+      }
+    />
+    <Route
+      path="/store/ofertas"
+      element={
+        <StoreLayout>
+          <OffersPage />
         </StoreLayout>
       }
     />

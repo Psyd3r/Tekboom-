@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
+import { FavoritesProvider } from "@/context/FavoritesContext";
 import { adminRoutes } from "./routes/AdminRoutes";
 import { storeRoutes } from "./routes/StoreRoutes";
 import { authRoutes } from "./routes/AuthRoutes";
@@ -40,7 +41,9 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <CartProvider>
-            <AppRoutes />
+            <FavoritesProvider>
+              <AppRoutes />
+            </FavoritesProvider>
           </CartProvider>
         </AuthProvider>
       </BrowserRouter>

@@ -12,7 +12,7 @@ export const useOrders = () => {
     try {
       setLoading(true);
       
-      // Modified query to correctly join profiles
+      // Get only orders that haven't been deleted (status is not 'deleted')
       const { data: ordersData, error: ordersError } = await supabase
         .from('orders')
         .select(`
@@ -21,7 +21,8 @@ export const useOrders = () => {
           created_at,
           total_amount,
           customer_id
-        `);
+        `)
+        .not('status', 'eq', 'deleted');
         
       if (ordersError) throw ordersError;
       
@@ -38,14 +39,14 @@ export const useOrders = () => {
         profilesMap.set(profile.id, profile);
       });
       
-      // Buscar itens dos pedidos para contar
+      // Fetch items for orders to count
       const { data: itemsData, error: itemsError } = await supabase
         .from('order_items')
         .select('order_id, id');
         
       if (itemsError) throw itemsError;
       
-      // Calcular contagem de itens
+      // Calculate item counts
       const itemCounts: Record<string, number> = {};
       itemsData?.forEach(item => {
         if (itemCounts[item.order_id]) {
@@ -105,6 +106,28 @@ export const useOrders = () => {
     }
   };
 
+  const handleDeleteOrder = async (orderId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    try {
+      // Instead of physically deleting the order, update its status to 'deleted'
+      const { error: orderError } = await supabase
+        .from('orders')
+        .update({ status: 'deleted' })
+        .eq('id', orderId);
+        
+      if (orderError) throw orderError;
+      
+      toast.success(`Pedido ${orderId} excluído com sucesso`);
+      
+      // Remove order from state
+      setOrders(orders.filter(order => order.id !== orderId));
+    } catch (error: any) {
+      console.error('Error deleting order:', error);
+      toast.error('Erro ao excluir pedido');
+    }
+  };
+
   useEffect(() => {
     fetchOrders();
   }, []);
@@ -113,6 +136,7 @@ export const useOrders = () => {
     orders,
     loading,
     fetchOrders,
-    handleUpdateStatus
+    handleUpdateStatus,
+    handleDeleteOrder
   };
 };

@@ -25,6 +25,8 @@ export const RegisterForm = () => {
     setIsLoading(true);
 
     try {
+      // Sempre criar cliente pela interface da loja
+      console.log("Criando novo usuário cliente");
       await signUp(email, password, name, 'customer');
       toast.success("Conta de cliente criada com sucesso!");
     } catch (error) {

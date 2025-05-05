@@ -2,7 +2,6 @@
 import { useAuth } from "@/context/AuthContext";
 import { StoreHeader } from "./StoreHeader";
 import { StoreFooter } from "./StoreFooter";
-import { cn } from "@/lib/utils";
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -17,16 +16,18 @@ export const StoreLayout = ({ children, requireAuth = false }: StoreLayoutProps)
   const location = useLocation();
   
   useEffect(() => {
-    // Redirect admin users to the admin panel when they access store pages
-    if (!loading && user && userRole === 'admin' && location.pathname.startsWith('/store')) {
-      navigate('/produtos', { replace: true });
-      return;
-    }
-    
-    // Redirect unauthenticated users to login if the page requires authentication
-    if (!loading && !user && requireAuth) {
-      navigate('/store/login', { state: { from: location.pathname } });
-      return;
+    // Se não está carregando, podemos verificar o usuário e papel
+    if (!loading) {
+      console.log("StoreLayout - Usuário:", user?.id, "Papel:", userRole);
+      
+      // Redirecionar usuários não autenticados para login se a página requer autenticação
+      if (!user && requireAuth) {
+        console.log("Redirecionando usuário não autenticado para login");
+        navigate('/store/login', { state: { from: location.pathname } });
+        return;
+      }
+      
+      // Nota: Removemos o redirecionamento automático de administradores para o painel
     }
   }, [user, loading, userRole, requireAuth, navigate, location]);
   

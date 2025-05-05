@@ -7,7 +7,7 @@ export type Order = {
   };
   created_at: string;
   total_amount: number;
-  status: "pending" | "processing" | "shipped" | "delivered" | "canceled";
+  status: "pending" | "processing" | "shipped" | "delivered" | "canceled" | "deleted";
   items_count?: number;
   shipping_address?: string | null;
   notes?: string | null;

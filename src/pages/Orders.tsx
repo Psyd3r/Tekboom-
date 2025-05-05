@@ -25,7 +25,7 @@ const Orders = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [activeTab, setActiveTab] = useState("all");
-  const { orders, loading, handleUpdateStatus } = useOrders();
+  const { orders, loading, handleUpdateStatus, handleDeleteOrder } = useOrders();
   
   const navigate = useNavigate();
   
@@ -42,7 +42,8 @@ const Orders = () => {
                       (activeTab === "recent" && new Date(order.created_at) >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)) ||
                       (activeTab === "pending" && (order.status === "pending" || order.status === "processing"));
     
-    return matchesSearch && matchesStatus && matchesTab;
+    // Don't show deleted orders
+    return matchesSearch && matchesStatus && matchesTab && order.status !== "deleted";
   });
 
   const getStatusClass = (status: string) => {
@@ -57,6 +58,8 @@ const Orders = () => {
         return "bg-gray-100 text-gray-800";
       case "canceled":
         return "bg-red-100 text-red-800";
+      case "deleted":
+        return "bg-red-100 text-red-800";
       default:
         return "bg-gray-100 text-gray-800";
     }
@@ -64,11 +67,6 @@ const Orders = () => {
 
   const handleOrderClick = (orderId: string) => {
     toast("Visualizando pedido " + orderId);
-  };
-
-  const handlePrintLabel = (orderId: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    toast("Gerando etiqueta para o pedido " + orderId);
   };
 
   return (
@@ -108,8 +106,8 @@ const Orders = () => {
                 filteredOrders={filteredOrders}
                 getStatusClass={getStatusClass}
                 handleOrderClick={handleOrderClick}
-                handlePrintLabel={handlePrintLabel}
                 handleUpdateStatus={handleUpdateStatus}
+                handleDeleteOrder={handleDeleteOrder}
                 handleCreateOrder={handleCreateOrder}
               />
             </CardContent>
@@ -117,7 +115,7 @@ const Orders = () => {
         </TabsContent>
       </Tabs>
 
-      <OrderStats orders={orders} />
+      <OrderStats orders={orders.filter(order => order.status !== "deleted")} />
     </motion.div>
   );
 };

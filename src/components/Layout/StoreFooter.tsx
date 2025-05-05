@@ -1,93 +1,80 @@
 
 import { Link } from "react-router-dom";
-import { Facebook, Instagram, Twitter, Youtube, Mail, Phone, MapPin, Store } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Facebook, Instagram, Twitter, Youtube, CreditCard, Truck, ShieldCheck, HeadphonesIcon, Store } from "lucide-react";
 
 export const StoreFooter = () => {
   return (
-    <footer className="bg-white border-t border-gray-100">
+    <footer className="bg-white border-t border-gray-200">
+      {/* Advantages bar */}
+      <div className="bg-[#F5F9FF] py-6 border-b border-gray-200">
+        <div className="container mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="flex items-center">
+              <CreditCard className="h-8 w-8 text-[#1E88E5] mr-3" />
+              <div>
+                <h4 className="text-sm font-semibold">Parcele suas compras</h4>
+                <p className="text-xs text-gray-600">Até 12x sem juros</p>
+              </div>
+            </div>
+            <div className="flex items-center">
+              <Truck className="h-8 w-8 text-[#1E88E5] mr-3" />
+              <div>
+                <h4 className="text-sm font-semibold">Frete grátis</h4>
+                <p className="text-xs text-gray-600">Em compras acima de R$199</p>
+              </div>
+            </div>
+            <div className="flex items-center">
+              <ShieldCheck className="h-8 w-8 text-[#1E88E5] mr-3" />
+              <div>
+                <h4 className="text-sm font-semibold">Compra garantida</h4>
+                <p className="text-xs text-gray-600">Seus dados protegidos</p>
+              </div>
+            </div>
+            <div className="flex items-center">
+              <HeadphonesIcon className="h-8 w-8 text-[#1E88E5] mr-3" />
+              <div>
+                <h4 className="text-sm font-semibold">Atendimento</h4>
+                <p className="text-xs text-gray-600">Suporte 24h</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Main footer content - simplificado conforme solicitado */}
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Company Info */}
-          <div>
-            <div className="flex items-center gap-2 mb-4">
-              <Store className="h-6 w-6 text-primary" />
+        <div className="flex justify-center mb-8">
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <Store className="h-6 w-6 text-[#1E88E5]" />
               <span className="font-bold text-xl">Teekbom</span>
             </div>
-            <p className="text-gray-600 mb-4">
+            <p className="text-gray-600 mb-6">
               Sua loja online com os melhores produtos e preços.
             </p>
-            <div className="flex space-x-3">
-              <a href="#" className="text-gray-500 hover:text-primary">
+            <div className="flex justify-center space-x-4">
+              <a href="#" className="text-gray-500 hover:text-[#1E88E5] transition-colors">
                 <Facebook className="h-5 w-5" />
               </a>
-              <a href="#" className="text-gray-500 hover:text-primary">
+              <a href="#" className="text-gray-500 hover:text-[#1E88E5] transition-colors">
                 <Instagram className="h-5 w-5" />
               </a>
-              <a href="#" className="text-gray-500 hover:text-primary">
+              <a href="#" className="text-gray-500 hover:text-[#1E88E5] transition-colors">
                 <Twitter className="h-5 w-5" />
               </a>
-              <a href="#" className="text-gray-500 hover:text-primary">
+              <a href="#" className="text-gray-500 hover:text-[#1E88E5] transition-colors">
                 <Youtube className="h-5 w-5" />
               </a>
             </div>
           </div>
-
-          {/* Quick Links */}
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-4">Links Rápidos</h3>
-            <ul className="space-y-2 text-gray-600">
-              <li><Link to="/store/sobre" className="hover:text-primary">Sobre Nós</Link></li>
-              <li><Link to="/store/contato" className="hover:text-primary">Contato</Link></li>
-              <li><Link to="/store/politica-privacidade" className="hover:text-primary">Política de Privacidade</Link></li>
-              <li><Link to="/store/termos" className="hover:text-primary">Termos de Uso</Link></li>
-              <li><Link to="/store/faq" className="hover:text-primary">Perguntas Frequentes</Link></li>
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-4">Contato</h3>
-            <ul className="space-y-3 text-gray-600">
-              <li className="flex items-start">
-                <MapPin className="h-5 w-5 mr-2 text-primary shrink-0 mt-0.5" />
-                <span>Rua Exemplo, 123, São Paulo - SP</span>
-              </li>
-              <li className="flex items-center">
-                <Phone className="h-5 w-5 mr-2 text-primary" />
-                <span>(11) 1234-5678</span>
-              </li>
-              <li className="flex items-center">
-                <Mail className="h-5 w-5 mr-2 text-primary" />
-                <span>contato@teekbom.com</span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Newsletter */}
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-4">Newsletter</h3>
-            <p className="text-gray-600 mb-4">
-              Inscreva-se para receber nossas ofertas e novidades.
-            </p>
-            <div className="flex flex-col space-y-2">
-              <Input 
-                type="email" 
-                placeholder="Seu e-mail"
-                className="border-gray-200" 
-              />
-              <Button className="w-full">Inscrever</Button>
-            </div>
-          </div>
         </div>
 
-        <div className="border-t border-gray-100 mt-12 pt-6">
+        <div className="border-t border-gray-200 mt-8 pt-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-500 text-sm">
               &copy; {new Date().getFullYear()} Teekbom. Todos os direitos reservados.
             </p>
-            <div className="flex space-x-4 mt-3 md:mt-0">
+            <div className="flex space-x-4 mt-4 md:mt-0">
               <img src="https://placehold.co/40x25" alt="Visa" className="h-6" />
               <img src="https://placehold.co/40x25" alt="Mastercard" className="h-6" />
               <img src="https://placehold.co/40x25" alt="PayPal" className="h-6" />

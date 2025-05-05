@@ -1,5 +1,5 @@
 
-import { Navigate, Route } from "react-router-dom";
+import { Navigate, Route, useLocation } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { MainLayout } from "@/components/Layout/MainLayout";
 
@@ -13,23 +13,30 @@ import Users from "@/pages/Users";
 import NewProduct from "@/pages/NewProduct";
 import EditProduct from "@/pages/EditProduct";
 import StockManagement from "@/pages/StockManagement";
+import Categories from "@/pages/Categories";
+import Marketing from "@/pages/Marketing";
 
 // Protected route component for admin users
 export const AdminRoute = ({ children }: { children: JSX.Element }) => {
   const { user, loading, userRole } = useAuth();
+  const location = useLocation();
   
   if (loading) {
     return <div className="flex h-screen w-full items-center justify-center">Carregando...</div>;
   }
   
   if (!user) {
-    return <Navigate to="/login" replace />;
+    console.log("AdminRoute - Usuário não autenticado, redirecionando para login admin");
+    return <Navigate to="/login" state={{ from: location.pathname }} replace />;
   }
 
+  // Verificar se o usuário tem o papel de administrador
   if (userRole !== 'admin') {
-    return <Navigate to="/store" replace />;
+    console.log("AdminRoute - Usuário não é administrador, redirecionando para a loja");
+    return <Navigate to="/store" state={{ from: location.pathname }} replace />;
   }
   
+  console.log("AdminRoute - Acesso permitido para:", userRole);
   return children;
 };
 
@@ -86,6 +93,16 @@ export const adminRoutes = (
       }
     />
     <Route
+      path="/categorias"
+      element={
+        <AdminRoute>
+          <MainLayout>
+            <Categories />
+          </MainLayout>
+        </AdminRoute>
+      }
+    />
+    <Route
       path="/pedidos"
       element={
         <AdminRoute>
@@ -116,11 +133,11 @@ export const adminRoutes = (
       }
     />
     <Route
-      path="/configuracoes"
+      path="/marketing"
       element={
         <AdminRoute>
           <MainLayout>
-            <Settings />
+            <Marketing />
           </MainLayout>
         </AdminRoute>
       }
@@ -131,6 +148,16 @@ export const adminRoutes = (
         <AdminRoute>
           <MainLayout>
             <Users />
+          </MainLayout>
+        </AdminRoute>
+      }
+    />
+    <Route
+      path="/configuracoes"
+      element={
+        <AdminRoute>
+          <MainLayout>
+            <Settings />
           </MainLayout>
         </AdminRoute>
       }

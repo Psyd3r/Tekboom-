@@ -39,6 +39,7 @@ const OrderHistoryPage = () => {
           notes
         `)
         .eq("customer_id", user.id)
+        .not('status', 'eq', 'deleted')
         .order("created_at", { ascending: false });
 
       if (error) {

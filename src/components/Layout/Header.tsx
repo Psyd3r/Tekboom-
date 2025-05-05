@@ -1,13 +1,15 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Bell, ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { Bell, ChevronLeft, ChevronRight, Menu, Search } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { AdminHeaderExtras } from "./AdminHeaderExtras";
 
 interface HeaderProps {
   onToggleSidebar: () => void;
@@ -15,22 +17,27 @@ interface HeaderProps {
 }
 
 export const Header = ({ onToggleSidebar, sidebarCollapsed }: HeaderProps) => {
+  const isMobile = useIsMobile();
+
   return (
-    <header className="h-16 border-b border-[#ECEFF1] bg-white flex items-center px-4 justify-between">
+    <header className="h-16 border-b border-[#ECEFF1] bg-white flex items-center px-4 justify-between sticky top-0 z-20 w-full shadow-sm">
       <div className="flex items-center">
         <Button
           variant="ghost"
           size="icon"
           onClick={onToggleSidebar}
-          className="mr-4"
+          className="mr-4 text-primary"
+          aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
-          {sidebarCollapsed ? (
-            <ChevronRight className="h-5 w-5 text-[#546E7A]" />
+          {isMobile ? (
+            <Menu className="h-5 w-5" />
+          ) : sidebarCollapsed ? (
+            <ChevronRight className="h-5 w-5" />
           ) : (
-            <ChevronLeft className="h-5 w-5 text-[#546E7A]" />
+            <ChevronLeft className="h-5 w-5" />
           )}
         </Button>
-        <div className="relative max-w-md w-96">
+        <div className="relative max-w-md w-full hidden sm:block">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-[#546E7A]" />
           <Input
             type="search"
@@ -40,6 +47,7 @@ export const Header = ({ onToggleSidebar, sidebarCollapsed }: HeaderProps) => {
         </div>
       </div>
       <div className="flex items-center space-x-2">
+        <AdminHeaderExtras />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon" className="relative">

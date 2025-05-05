@@ -1,5 +1,5 @@
 
-import { Home, ShoppingCart, Users, Settings, PackageOpen, Package } from "lucide-react";
+import { Home, ShoppingCart, Users, Settings, PackageOpen, Package, UserPlus, Layers, ImageIcon } from "lucide-react";
 
 export const sidebarLinks = [
   {
@@ -7,6 +7,12 @@ export const sidebarLinks = [
     href: "/produtos",
     icon: Package,
     active: (path: string) => path === "/produtos" || path.startsWith("/produtos/"),
+  },
+  {
+    label: "Categorias",
+    href: "/categorias",
+    icon: Layers,
+    active: (path: string) => path === "/categorias",
   },
   {
     label: "Estoque",
@@ -25,6 +31,18 @@ export const sidebarLinks = [
     href: "/clientes",
     icon: Users,
     active: (path: string) => path === "/clientes",
+  },
+  {
+    label: "Marketing",
+    href: "/marketing",
+    icon: ImageIcon,
+    active: (path: string) => path === "/marketing",
+  },
+  {
+    label: "Usuários Admin",
+    href: "/usuarios",
+    icon: UserPlus,
+    active: (path: string) => path === "/usuarios",
   },
   {
     label: "Configurações",

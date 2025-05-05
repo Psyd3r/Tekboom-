@@ -7,6 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { toast } from "@/components/ui/sonner";
 import { useCart } from "@/context/CartContext";
+import { useFavorites } from "@/context/FavoritesContext";
+import { useFetchCategories } from "@/hooks/category/useFetchCategories";
 
 interface ProductCardProps {
   id: string;
@@ -31,8 +33,12 @@ export const ProductCard = ({
   isSale = false,
   category,
 }: ProductCardProps) => {
-  const [isFavorite, setIsFavorite] = useState(false);
   const { addToCart, isInCart } = useCart();
+  const { addToFavorites, removeFromFavorites, isInFavorites } = useFavorites();
+  const { data: categories = [] } = useFetchCategories();
+  
+  // Get category name from category ID
+  const categoryName = categories.find(cat => cat.id === category)?.name || category;
   
   const formattedPrice = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
@@ -49,12 +55,17 @@ export const ProductCard = ({
   const toggleFavorite = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsFavorite(!isFavorite);
     
-    if (!isFavorite) {
-      toast("Produto adicionado aos favoritos");
+    if (!isInFavorites(id)) {
+      addToFavorites({
+        id,
+        name,
+        price,
+        image,
+        category
+      });
     } else {
-      toast("Produto removido dos favoritos");
+      removeFromFavorites(id);
     }
   };
   
@@ -82,10 +93,10 @@ export const ProductCard = ({
       {/* Badges */}
       <div className="absolute top-2 left-2 z-10 flex flex-col gap-1">
         {isNew && (
-          <Badge className="bg-blue-500 hover:bg-blue-600">Novo</Badge>
+          <Badge className="bg-[#0D47A1] hover:bg-[#0A3D8F] px-2 py-1">Novo</Badge>
         )}
         {isSale && originalPrice && (
-          <Badge className="bg-[#E53935] hover:bg-red-700">-{discount}%</Badge>
+          <Badge className="bg-[#E53935] hover:bg-red-700 px-2 py-1">-{discount}%</Badge>
         )}
       </div>
       
@@ -97,7 +108,7 @@ export const ProductCard = ({
         <Heart
           className={cn(
             "h-5 w-5 transition-colors",
-            isFavorite ? "fill-[#E53935] text-[#E53935]" : "text-gray-400"
+            isInFavorites(id) ? "fill-[#E53935] text-[#E53935]" : "text-gray-400"
           )}
         />
       </button>
@@ -108,7 +119,7 @@ export const ProductCard = ({
           <img
             src={image || "https://placehold.co/300x400"}
             alt={name}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-105"
           />
         </div>
       </Link>
@@ -116,8 +127,8 @@ export const ProductCard = ({
       {/* Product Info */}
       <div className="p-4">
         <Link to={`/store/produto/${id}`}>
-          <div className="text-xs text-gray-500 mb-1">{category}</div>
-          <h3 className="font-medium text-gray-800 mb-1 line-clamp-2 hover:text-primary transition-colors">
+          <div className="text-xs text-gray-500 mb-1">{categoryName}</div>
+          <h3 className="font-medium text-gray-800 mb-1 line-clamp-2 hover:text-[#1E88E5] transition-colors">
             {name}
           </h3>
           
@@ -138,13 +149,18 @@ export const ProductCard = ({
           </div>
           
           {/* Price */}
-          <div className="flex items-center gap-2 mb-3">
-            <span className="font-semibold text-gray-900">{formattedPrice}</span>
+          <div className="flex flex-col mb-3">
             {formattedOriginalPrice && (
               <span className="text-sm text-gray-500 line-through">
-                {formattedOriginalPrice}
+                De: {formattedOriginalPrice}
               </span>
             )}
+            <span className="text-xl font-bold text-[#0D47A1]">
+              {formattedPrice}
+            </span>
+            <span className="text-xs text-gray-600">
+              à vista ou em até 12x
+            </span>
           </div>
         </Link>
         
@@ -152,7 +168,9 @@ export const ProductCard = ({
         <Button 
           className={cn(
             "w-full flex items-center justify-center gap-2",
-            isInCart(id) ? "bg-green-600 hover:bg-green-700" : ""
+            isInCart(id) 
+              ? "bg-green-600 hover:bg-green-700" 
+              : "bg-[#1E88E5] hover:bg-[#1976D2]"
           )}
           onClick={handleAddToCart}
         >

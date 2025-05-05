@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Package } from "lucide-react";
+import { Package, Trash2 } from "lucide-react";
 import { Order } from "@/types/order";
 
 interface OrdersTableProps {
@@ -18,8 +18,8 @@ interface OrdersTableProps {
   filteredOrders: Order[];
   getStatusClass: (status: string) => string;
   handleOrderClick: (orderId: string) => void;
-  handlePrintLabel: (orderId: string, e: React.MouseEvent) => void;
   handleUpdateStatus: (orderId: string, status: string, e: React.MouseEvent) => void;
+  handleDeleteOrder: (orderId: string, e: React.MouseEvent) => void;
   handleCreateOrder: () => void;
 }
 
@@ -28,8 +28,8 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
   filteredOrders,
   getStatusClass,
   handleOrderClick,
-  handlePrintLabel,
   handleUpdateStatus,
+  handleDeleteOrder,
   handleCreateOrder,
 }) => {
   return (
@@ -78,11 +78,11 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
                 </TableCell>
                 <TableCell className="text-right space-x-2">
                   <Button 
-                    variant="outline" 
+                    variant="destructive" 
                     size="sm"
-                    onClick={(e) => handlePrintLabel(order.id, e)}
+                    onClick={(e) => handleDeleteOrder(order.id, e)}
                   >
-                    Etiqueta
+                    <Trash2 className="h-4 w-4" />
                   </Button>
                   <Select 
                     value={order.status}

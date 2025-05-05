@@ -1,12 +1,11 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Shield, Store, Mail, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import { toast } from "@/components/ui/sonner";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
@@ -16,13 +15,17 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { signIn, user, userRole } = useAuth();
   const navigate = useNavigate();
-
+  
   useEffect(() => {
+    // Redirecionar usuários já autenticados
     if (user) {
+      console.log("Login admin - Usuário já autenticado:", user.id, "Papel:", userRole);
+      
       if (userRole === 'admin') {
-        navigate("/produtos");
-      } else {
-        navigate("/store");
+        navigate("/produtos", { replace: true });
+      } else if (userRole === 'customer') {
+        // Se um cliente tentar acessar o login administrativo, redirecionar para a loja
+        navigate("/store", { replace: true });
       }
     }
   }, [user, userRole, navigate]);
@@ -32,6 +35,7 @@ const Login = () => {
     setIsLoading(true);
     try {
       await signIn(email, password);
+      // O redirecionamento é feito dentro da função signIn
     } catch (error) {
       console.error("Login error:", error);
     } finally {
