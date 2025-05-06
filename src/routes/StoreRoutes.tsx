@@ -1,3 +1,4 @@
+
 import { Route } from "react-router-dom";
 import { StoreLayout } from "@/components/Layout/StoreLayout";
 import HomePage from "@/pages/Store/HomePage";
@@ -17,7 +18,7 @@ import ResetPasswordPage from "@/pages/Store/ResetPasswordPage";
 
 export const storeRoutes = (
   <>
-    <Route path="/store" element={<StoreLayout />}>
+    <Route path="/store" element={<StoreLayout children={null} />}>
       <Route index element={<HomePage />} />
       <Route path="produtos" element={<ProductListPage />} />
       <Route path="produtos/:id" element={<ProductPage />} />
@@ -32,7 +33,7 @@ export const storeRoutes = (
     <Route path="/store/esqueci-senha" element={<ForgotPasswordPage />} />
     <Route path="/store/reset-password" element={<ResetPasswordPage />} />
     
-    <Route path="/store" element={<StoreLayout requireAuth />}>
+    <Route path="/store" element={<StoreLayout requireAuth children={null} />}>
       <Route path="checkout" element={<CheckoutPage />} />
       <Route path="favoritos" element={<FavoritesPage />} />
       <Route path="perfil" element={<CustomerProfilePage />} />
