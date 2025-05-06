@@ -3,14 +3,14 @@ import { useAuth } from "@/context/AuthContext";
 import { StoreHeader } from "./StoreHeader";
 import { StoreFooter } from "./StoreFooter";
 import { useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Outlet } from "react-router-dom";
 
 interface StoreLayoutProps {
   children: React.ReactNode;
   requireAuth?: boolean;
 }
 
-export const StoreLayout = ({ children, requireAuth = false }: StoreLayoutProps) => {
+export const StoreLayout = ({ requireAuth = false }: StoreLayoutProps) => {
   const { user, loading, userRole } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -26,8 +26,6 @@ export const StoreLayout = ({ children, requireAuth = false }: StoreLayoutProps)
         navigate('/store/login', { state: { from: location.pathname } });
         return;
       }
-      
-      // Nota: Removemos o redirecionamento automático de administradores para o painel
     }
   }, [user, loading, userRole, requireAuth, navigate, location]);
   
@@ -44,7 +42,7 @@ export const StoreLayout = ({ children, requireAuth = false }: StoreLayoutProps)
       <StoreHeader />
       <main className="flex-1">
         <div className="container mx-auto py-6 px-4 animate-fade-in">
-          {children}
+          <Outlet />
         </div>
       </main>
       <StoreFooter />

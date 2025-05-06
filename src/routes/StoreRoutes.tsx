@@ -18,21 +18,24 @@ import ResetPasswordPage from "@/pages/Store/ResetPasswordPage";
 
 export const storeRoutes = (
   <>
+    {/* Public store routes */}
     <Route path="/store" element={<StoreLayout children={null} />}>
       <Route index element={<HomePage />} />
       <Route path="produtos" element={<ProductListPage />} />
-      <Route path="produtos/:id" element={<ProductPage />} />
+      <Route path="produto/:id" element={<ProductPage />} />
       <Route path="categorias" element={<CategoriesPage />} />
-      <Route path="categorias/:id" element={<ProductListPage />} />
+      <Route path="categoria/:id" element={<ProductListPage />} />
       <Route path="ofertas" element={<OffersPage />} />
       <Route path="monte-seu-pc" element={<BuildPcPage />} />
       <Route path="carrinho" element={<CartPage />} />
     </Route>
     
+    {/* Auth routes */}
     <Route path="/store/login" element={<LoginPage />} />
     <Route path="/store/esqueci-senha" element={<ForgotPasswordPage />} />
     <Route path="/store/reset-password" element={<ResetPasswordPage />} />
     
+    {/* Protected store routes */}
     <Route path="/store" element={<StoreLayout requireAuth children={null} />}>
       <Route path="checkout" element={<CheckoutPage />} />
       <Route path="favoritos" element={<FavoritesPage />} />
