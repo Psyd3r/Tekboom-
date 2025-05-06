@@ -70,16 +70,10 @@ export const StoreFooter = () => {
         </div>
 
         <div className="border-t border-gray-200 mt-8 pt-6">
-          <div className="flex flex-col md:flex-row justify-between items-center">
+          <div className="flex justify-center items-center">
             <p className="text-gray-500 text-sm">
               &copy; {new Date().getFullYear()} Teekbom. Todos os direitos reservados.
             </p>
-            <div className="flex space-x-4 mt-4 md:mt-0">
-              <img src="https://placehold.co/40x25" alt="Visa" className="h-6" />
-              <img src="https://placehold.co/40x25" alt="Mastercard" className="h-6" />
-              <img src="https://placehold.co/40x25" alt="PayPal" className="h-6" />
-              <img src="https://placehold.co/40x25" alt="Pix" className="h-6" />
-            </div>
           </div>
         </div>
       </div>

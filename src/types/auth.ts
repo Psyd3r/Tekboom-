@@ -10,5 +10,7 @@ export interface AuthContextType {
   userRole: UserRole;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, fullName: string, role?: 'admin' | 'customer') => Promise<void>;
+  resetPassword: (email: string) => Promise<{ success: boolean; error?: string }>;
+  updatePassword: (newPassword: string) => Promise<{ success: boolean; error?: string }>;
   signOut: () => Promise<void>;
 }

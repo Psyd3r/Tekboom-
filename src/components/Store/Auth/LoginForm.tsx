@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Mail, Lock, ShieldAlert } from "lucide-react";
+import { Mail, Lock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "@/components/ui/sonner";
 
@@ -11,8 +11,7 @@ export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isCreatingAdmin, setIsCreatingAdmin] = useState(false);
-  const { signIn, signUp } = useAuth();
+  const { signIn } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,23 +24,6 @@ export const LoginForm = () => {
       console.error("Erro ao fazer login:", error);
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handleCreateAdmin = async () => {
-    if (!email || !password) {
-      toast.error("Preencha email e senha para criar o administrador");
-      return;
-    }
-
-    setIsCreatingAdmin(true);
-    try {
-      // O signUp com papel 'admin' fará login automaticamente e redirecionará para o painel administrativo
-      await signUp(email, password, email.split('@')[0], 'admin');
-    } catch (error) {
-      console.error("Erro ao criar conta de administrador:", error);
-    } finally {
-      setIsCreatingAdmin(false);
     }
   };
 
@@ -89,22 +71,6 @@ export const LoginForm = () => {
       <Button type="submit" className="w-full" disabled={isLoading}>
         {isLoading ? "Entrando..." : "Entrar como Cliente"}
       </Button>
-      
-      <div className="mt-2 pt-2 border-t border-gray-100">
-        <Button 
-          type="button" 
-          variant="outline" 
-          className="w-full mt-2 border-dashed border-gray-300 flex items-center gap-2"
-          onClick={handleCreateAdmin}
-          disabled={isCreatingAdmin}
-        >
-          <ShieldAlert className="h-4 w-4 text-amber-600" />
-          {isCreatingAdmin ? "Criando administrador..." : "Criar Conta Administrativa"}
-        </Button>
-        <p className="text-xs text-center text-gray-500 mt-2">
-          Use esta opção apenas para criar um usuário administrador inicial
-        </p>
-      </div>
     </form>
   );
 };

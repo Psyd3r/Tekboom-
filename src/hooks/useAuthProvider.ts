@@ -169,6 +169,40 @@ export function useAuthProvider() {
     }
   };
 
+  const resetPassword = async (email: string) => {
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + "/store/reset-password",
+      });
+      
+      if (error) {
+        throw error;
+      }
+      
+      return { success: true };
+    } catch (error: any) {
+      console.error("Erro ao enviar email de recuperação:", error);
+      return { success: false, error: error.message };
+    }
+  };
+
+  const updatePassword = async (newPassword: string) => {
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword,
+      });
+      
+      if (error) {
+        throw error;
+      }
+      
+      return { success: true };
+    } catch (error: any) {
+      console.error("Erro ao atualizar senha:", error);
+      return { success: false, error: error.message };
+    }
+  };
+
   const signOut = async () => {
     try {
       await supabase.auth.signOut();
@@ -191,6 +225,8 @@ export function useAuthProvider() {
     userRole,
     signIn,
     signUp,
+    resetPassword,
+    updatePassword,
     signOut
   };
 }
