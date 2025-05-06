@@ -15,6 +15,7 @@ import OrderHistoryPage from "@/pages/Store/OrderHistoryPage";
 import LoginPage from "@/pages/Store/LoginPage";
 import ForgotPasswordPage from "@/pages/Store/ForgotPasswordPage";
 import ResetPasswordPage from "@/pages/Store/ResetPasswordPage";
+import HelpCenterPage from "@/pages/Store/HelpCenterPage";
 
 export const storeRoutes = (
   <>
@@ -28,6 +29,7 @@ export const storeRoutes = (
       <Route path="ofertas" element={<OffersPage />} />
       <Route path="monte-seu-pc" element={<BuildPcPage />} />
       <Route path="carrinho" element={<CartPage />} />
+      <Route path="ajuda" element={<HelpCenterPage />} />
     </Route>
     
     {/* Auth routes */}
