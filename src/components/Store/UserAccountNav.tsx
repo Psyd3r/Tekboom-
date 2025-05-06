@@ -11,7 +11,7 @@ export const UserAccountNav = () => {
   return (
     <div className="flex flex-col items-center text-gray-700 hover:text-[#1E88E5]">
       <UserRound className="h-5 w-5" />
-      <Link to="/store/minha-conta" className="text-xs">
+      <Link to="/store/perfil" className="text-xs">
         Minha Conta
       </Link>
     </div>

@@ -7,6 +7,7 @@ interface Logo {
   id: string;
   imageUrl: string;
   altText: string;
+  storeName?: string;
 }
 
 export const AdminLogo = ({ collapsed = false }) => {
@@ -35,19 +36,27 @@ export const AdminLogo = ({ collapsed = false }) => {
     },
   });
 
+  // Nome padrão da loja se não existir na config
+  const storeName = logoConfig?.storeName || "Teekbom";
+
   return (
     <div className="flex items-center justify-center">
       {logoConfig?.imageUrl ? (
-        <img 
-          src={logoConfig.imageUrl} 
-          alt={logoConfig.altText || "Teekbom Admin"} 
-          className={collapsed ? "h-8 w-auto" : "h-10 w-auto"} 
-        />
+        <div className="flex flex-col items-center">
+          <img 
+            src={logoConfig.imageUrl} 
+            alt={logoConfig.altText || "Teekbom Admin"} 
+            className={collapsed ? "h-8 w-auto" : "h-10 w-auto"} 
+          />
+          {!collapsed && (
+            <span className="font-bold text-lg text-white">{storeName}</span>
+          )}
+        </div>
       ) : (
-        <div className={`flex items-center ${collapsed ? "justify-center" : ""}`}>
+        <div className={`flex flex-col items-center ${collapsed ? "justify-center" : ""}`}>
           <Store className="h-6 w-6 text-white" />
           {!collapsed && (
-            <span className="ml-2 font-bold text-lg text-white">Teekbom</span>
+            <span className="font-bold text-lg text-white">{storeName}</span>
           )}
         </div>
       )}

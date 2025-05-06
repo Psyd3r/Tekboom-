@@ -20,7 +20,7 @@ import HelpCenterPage from "@/pages/Store/HelpCenterPage";
 export const storeRoutes = (
   <>
     {/* Public store routes */}
-    <Route path="/store" element={<StoreLayout children={null} />}>
+    <Route path="/store" element={<StoreLayout />}>
       <Route index element={<HomePage />} />
       <Route path="produtos" element={<ProductListPage />} />
       <Route path="produto/:id" element={<ProductPage />} />
@@ -38,7 +38,7 @@ export const storeRoutes = (
     <Route path="/store/reset-password" element={<ResetPasswordPage />} />
     
     {/* Protected store routes */}
-    <Route path="/store" element={<StoreLayout requireAuth children={null} />}>
+    <Route path="/store" element={<StoreLayout requireAuth />}>
       <Route path="checkout" element={<CheckoutPage />} />
       <Route path="favoritos" element={<FavoritesPage />} />
       <Route path="perfil" element={<CustomerProfilePage />} />
