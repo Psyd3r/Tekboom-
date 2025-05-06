@@ -30,6 +30,7 @@ export const storeRoutes = (
       <Route path="monte-seu-pc" element={<BuildPcPage />} />
       <Route path="carrinho" element={<CartPage />} />
       <Route path="ajuda" element={<HelpCenterPage />} />
+      <Route path="historico" element={<OrderHistoryPage />} /> {/* Added public order history route */}
     </Route>
     
     {/* Auth routes */}
@@ -42,7 +43,7 @@ export const storeRoutes = (
       <Route path="checkout" element={<CheckoutPage />} />
       <Route path="favoritos" element={<FavoritesPage />} />
       <Route path="perfil" element={<CustomerProfilePage />} />
-      <Route path="pedidos" element={<OrderHistoryPage />} />
+      <Route path="pedidos" element={<OrderHistoryPage />} /> {/* Keep this protected route as well */}
     </Route>
   </>
 );

@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
 
 interface StoreLayoutProps {
-  children: React.ReactNode;
+  children?: React.ReactNode; // Made children optional since we're using Outlet
   requireAuth?: boolean;
 }
 

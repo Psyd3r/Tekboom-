@@ -1,10 +1,12 @@
+
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Plus, Minus, ShoppingCart } from "lucide-react";
+import { Plus, Minus, ShoppingCart, Check } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { motion, AnimatePresence } from "framer-motion";
 
 const ProductPage = () => {
   const { id } = useParams();
@@ -12,6 +14,7 @@ const ProductPage = () => {
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const { addToCart, isInCart } = useCart();
+  const [showAddedToCart, setShowAddedToCart] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -41,6 +44,13 @@ const ProductPage = () => {
     }
   }, [id]);
 
+  // Reset showAddedToCart when the cart status changes directly (e.g., when removing from cart)
+  useEffect(() => {
+    if (id && !isInCart(id)) {
+      setShowAddedToCart(false);
+    }
+  }, [isInCart, id]);
+
   const handleIncreaseQuantity = () => {
     setQuantity((prev) => prev + 1);
   };
@@ -55,7 +65,7 @@ const ProductPage = () => {
     if (!product) return;
 
     addToCart({
-      id: product.id, // Adicionando a propriedade id requerida
+      id: crypto.randomUUID(),
       product_id: product.id,
       name: product.name,
       price: product.price,
@@ -63,6 +73,14 @@ const ProductPage = () => {
       quantity: quantity,
       total: product.price * quantity,
     });
+    
+    // Show added to cart state for 2 seconds
+    setShowAddedToCart(true);
+    setTimeout(() => {
+      setShowAddedToCart(false);
+    }, 2000);
+    
+    toast.success("Produto adicionado ao carrinho");
   };
 
   if (loading) {
@@ -157,20 +175,42 @@ const ProductPage = () => {
               </Button>
             </div>
 
-            <Button
-              className="w-full"
-              size="lg"
-              onClick={handleAddToCart}
-              disabled={isInCart(product.id)}
-            >
-              {isInCart(product.id) ? (
-                "Produto no carrinho"
+            <AnimatePresence mode="wait">
+              {showAddedToCart || isInCart(product.id) ? (
+                <motion.div
+                  initial={{ scale: 0.95, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.95, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  key="added-button"
+                  className="w-full"
+                >
+                  <Button
+                    className="w-full bg-green-600 hover:bg-green-700"
+                    size="lg"
+                  >
+                    <Check className="mr-2 h-4 w-4" /> Produto no carrinho
+                  </Button>
+                </motion.div>
               ) : (
-                <>
-                  <ShoppingCart className="mr-2 h-4 w-4" /> Adicionar ao carrinho
-                </>
+                <motion.div
+                  initial={{ scale: 0.95, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.95, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  key="add-button"
+                  className="w-full"
+                >
+                  <Button
+                    className="w-full"
+                    size="lg"
+                    onClick={handleAddToCart}
+                  >
+                    <ShoppingCart className="mr-2 h-4 w-4" /> Adicionar ao carrinho
+                  </Button>
+                </motion.div>
               )}
-            </Button>
+            </AnimatePresence>
           </div>
         </div>
       </div>

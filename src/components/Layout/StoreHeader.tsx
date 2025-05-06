@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { ShoppingBag, Settings, Heart, User, Menu, ChevronDown, Computer } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,8 +10,6 @@ import { Badge } from "@/components/ui/badge";
 import { StoreLogoHeader } from "@/components/Store/Auth/StoreLogoHeader";
 import { SearchBar } from "@/components/Store/SearchBar";
 import { useFetchCategories } from "@/hooks/category/useFetchCategories";
-import { Skeleton } from "@/components/ui/skeleton";
-import { motion, AnimatePresence } from "framer-motion";
 import { CategoryDropdown } from "@/components/Store/CategoryDropdown";
 
 export function StoreHeader() {
@@ -96,20 +93,12 @@ export function StoreHeader() {
             <Link to="/store/carrinho" className="flex flex-col items-center text-gray-700 hover:text-[#1E88E5] relative">
               <ShoppingBag className="h-5 w-5" />
               <span className="text-xs">Carrinho</span>
-              <AnimatePresence>
-                {showCartBadge && cart.count > 0 && (
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    exit={{ scale: 0 }}
-                    className="absolute -top-2 -right-2"
-                  >
-                    <Badge className="h-5 w-5 flex items-center justify-center p-0 bg-[#E53935]">
-                      {cart.count}
-                    </Badge>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              
+              {showCartBadge && cart.count > 0 && (
+                <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 bg-[#E53935]">
+                  {cart.count}
+                </Badge>
+              )}
             </Link>
           </div>
         </div>
